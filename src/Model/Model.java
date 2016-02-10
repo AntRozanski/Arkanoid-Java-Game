@@ -263,6 +263,7 @@ public class Model
 	public void initPcs()
 	{
 		getPcs().addPropertyChangeListener("BiggerRacketUpgrade", getRacket());
+	
 	}
 
 	/**
@@ -325,7 +326,7 @@ public class Model
 
 		if (isNewBall())
 		{
-			getFactory().createBall(racket);
+			getPcs().addPropertyChangeListener("BiggerRacketUpgrade",getFactory().createBall(racket));
 			setNewBall(false);
 			isChanged = true;
 		}

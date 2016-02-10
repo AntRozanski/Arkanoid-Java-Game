@@ -7,7 +7,11 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.Serializable;
+
+import Utils.Constants;
 
 /**
  * Main class of the game. Every object inherits from this class. Contains basic
@@ -18,7 +22,7 @@ import java.io.Serializable;
  * @author Antek
  *
  */
-public abstract class GameObject implements Serializable
+public abstract class GameObject implements Serializable, PropertyChangeListener
 {
 
 	private Color color;
@@ -61,13 +65,13 @@ public abstract class GameObject implements Serializable
 		this.y = y;
 	}
 
-	
 	public void setCoordinates(int x, int y)
 	{
 		this.x = x;
 		this.y = y;
 	}
-/**
+
+	/**
 	 * @return the width
 	 */
 	public int getWidth()
@@ -191,4 +195,21 @@ public abstract class GameObject implements Serializable
 	 * Provide information how that Gameobject should be drawn.
 	 */
 	public abstract void draw(Graphics g);
+	@Override
+	public void propertyChange(PropertyChangeEvent evt)
+	{
+		if (evt.getPropertyName() == "BiggerRacketUpgrade")
+		{
+			if ((Boolean) evt.getNewValue() == true)
+			{
+				setColor(Color.white);
+			}
+			else
+			{
+				setColor(Color.black);
+			}
+		}
+
+	}
+
 }
