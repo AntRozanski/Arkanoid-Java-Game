@@ -125,6 +125,17 @@ public class Racket extends GameObject implements PropertyChangeListener
 				setDesiredWidth(Constants.STANDARD_RACKET_WIDTH);
 			}
 		}
+		if (evt.getPropertyName() == "SmallerRacketUpgrade")
+		{
+			if ((Boolean) evt.getNewValue() == true)
+			{
+				setDesiredWidth(Constants.SMALLER_UPGRADE_RACKET_WIDTH);
+			}
+			else
+			{
+				setDesiredWidth(Constants.STANDARD_RACKET_WIDTH);
+			}
+		}
 
 	}
 

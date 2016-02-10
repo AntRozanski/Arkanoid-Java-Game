@@ -265,15 +265,15 @@ public class GameFactory
 		double r = Math.random();
 		Color color;
 		Upgrade upgr;
-		if(true)// (r > 0.5)
+		if(r > 0.5)
 		{
 			color = Color.green;
-			upgr = new BiggerRacketUpgrade(Constants.BIGGER_RACKET_UPGRADE_TIME);
+			upgr = new BiggerRacketUpgrade(Constants.BIGGER_RACKET_UPGRADE_TIME, "BiggerRacketUpgrade");
 		}
 		else
 		{
 			color = Color.cyan;
-			upgr = null;
+			upgr = new BiggerRacketUpgrade(Constants.BIGGER_RACKET_UPGRADE_TIME,"SmallerRacketUpgrade");
 		}
 		FallingUpgrade fu = new FallingUpgrade(color, b.getX() + (b.getWidth() - Constants.STANDARD_UPGRADE_SIZE) / 2,
 				b.getY(), Constants.STANDARD_UPGRADE_SIZE, Constants.STANDARD_UPGRADE_SIZE, 0, 1, 0.0, 0.5, upgr);

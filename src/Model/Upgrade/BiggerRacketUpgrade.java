@@ -7,9 +7,9 @@ public class BiggerRacketUpgrade extends Upgrade
 	private int lenght;// how long the racket is wider
 	private long currentTime;
 
-	public BiggerRacketUpgrade(int lenght)
+	public BiggerRacketUpgrade(int lenght,String name)
 	{
-		setName("BiggerRacketUpgrade");
+		setName(name);
 		setLenght(lenght);
 	}
 

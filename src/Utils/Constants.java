@@ -34,4 +34,5 @@ public final class Constants
 	//UPGRDE CONSTANTS:
 	public static final int BIGGER_UPGRADE_RACKET_WIDTH = 400;
 	public static final int BIGGER_RACKET_UPGRADE_TIME = 5;
+	public static final int SMALLER_UPGRADE_RACKET_WIDTH = 80;
 }
