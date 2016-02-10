@@ -4,14 +4,16 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
-import Model.Upgrade.FallingUpdate;
+import Model.Upgrade.BiggerRacketUpgrade;
+import Model.Upgrade.FallingUpgrade;
+import Model.Upgrade.Upgrade;
 import Utils.Constants;
 
 /**
- * 
- * 
+ *
+ *
  * Class, where all of objects are made.
- * 
+ *
  * @author Antek
  *
  */
@@ -75,7 +77,7 @@ public class GameFactory
 	/**
 	 * Contructor of GamaFactory. Parameters below are lists, where newly
 	 * created object will be placed.
-	 * 
+	 *
 	 * @param GameObjectList
 	 * @param MovableObjectList
 	 * @param StillObjectList
@@ -91,7 +93,7 @@ public class GameFactory
 	/**
 	 * This function creates new ball on top of the racket, and adds it to the
 	 * proper lists
-	 * 
+	 *
 	 * @param racket,
 	 *            wchich coordinates are used to place new Ball
 	 * @return new Ball
@@ -112,7 +114,7 @@ public class GameFactory
 	/**
 	 * Called at the beginning of the game, when game board is created. Creates
 	 * the racket at the middle bottom of the game area.
-	 * 
+	 *
 	 * @return newly created racket
 	 */
 	public Racket createRacket()
@@ -130,8 +132,8 @@ public class GameFactory
 	 * Called at the beginning of the game, when game board is created. Creates
 	 * walls, which surround game board on the sides and on the top, and adds
 	 * these 3 objects into proper lists.
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	public void createWalls()
 	{
@@ -155,8 +157,8 @@ public class GameFactory
 	/**
 	 * Called when creating EditorModel. Creates walls, which surround game
 	 * board on the sides and on the top and add them to the editorModel list.
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	public void createWalls(ArrayList<StillObject> list)
 	{
@@ -183,7 +185,7 @@ public class GameFactory
 
 	/**
 	 * Creates brick. Color depends on health parameter.
-	 * 
+	 *
 	 * @param x
 	 * @param y
 	 * @param width
@@ -210,7 +212,7 @@ public class GameFactory
 	/**
 	 * Create unmovableBrick with given parameters. Color is always the same -
 	 * light gray.
-	 * 
+	 *
 	 * @param x
 	 * @param y
 	 * @param width
@@ -225,7 +227,7 @@ public class GameFactory
 	/**
 	 * Function used to create random game board, when there is no files with
 	 * levels to load.
-	 * 
+	 *
 	 * @param cols
 	 *            number of colums
 	 * @param rows
@@ -252,9 +254,9 @@ public class GameFactory
 	/**
 	 * Class representing newly created upgrade, which is falling down from
 	 * destroyed brick. If Racket collects it, some bonus will be fired.
-	 * 
+	 *
 	 * Bonus is choosen randomly.
-	 * 
+	 *
 	 * @param b
 	 *            - destroyed brick: the origin of fallingUpgrade
 	 */
@@ -262,26 +264,27 @@ public class GameFactory
 	{
 		double r = Math.random();
 		Color color;
-		String name;
-		if (r > 0.5)
+		Upgrade upgr;
+		if(true)// (r > 0.5)
 		{
 			color = Color.green;
-			name = "Bigger update";
+			upgr = new BiggerRacketUpgrade(Constants.BIGGER_RACKET_UPGRADE_TIME);
 		}
 		else
 		{
 			color = Color.cyan;
-			name = "Smaller update";
+			upgr = null;
 		}
-		FallingUpdate fu = new FallingUpdate(color, b.getX() + (b.getWidth() - Constants.STANDARD_UPGRADE_SIZE) / 2,
-				b.getY(), Constants.STANDARD_UPGRADE_SIZE, Constants.STANDARD_UPGRADE_SIZE, 0, 1, 0.0, 0.5, name);
+		FallingUpgrade fu = new FallingUpgrade(color, b.getX() + (b.getWidth() - Constants.STANDARD_UPGRADE_SIZE) / 2,
+				b.getY(), Constants.STANDARD_UPGRADE_SIZE, Constants.STANDARD_UPGRADE_SIZE, 0, 1, 0.0, 0.5, upgr);
 		fu.setMoving(true);
 		getMovableObjectList().add(fu);
 		getGameObjectList().add(fu);
 	}
 
 	/**
-	 * @return new Color object with random red, green adn blue colors saturation.
+	 * @return new Color object with random red, green adn blue colors
+	 *         saturation.
 	 */
 	public Color randomColor()
 	{

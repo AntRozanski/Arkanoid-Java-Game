@@ -26,8 +26,12 @@ public final class Constants
 
 	public final static int STANDARD_UPGRADE_SIZE = 30;
 	public final static int STANDARD_BALL_SPEED = 6;
-	public final static int STANDARD_HP = 10;
+	public final static int STANDARD_HP = 12220;
 
 	public final static int GAME_LOOP_TIME = 10000000;
 	public static final int STANDARD_RACKET_SPEED = 5;
+	
+	//UPGRDE CONSTANTS:
+	public static final int BIGGER_UPGRADE_RACKET_WIDTH = 400;
+	public static final int BIGGER_RACKET_UPGRADE_TIME = 5;
 }

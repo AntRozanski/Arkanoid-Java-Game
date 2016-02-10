@@ -8,9 +8,17 @@ import Model.MovableObject;
 import Model.Racket;
 import Utils.Constants;
 
-public class FallingUpdate extends MovableObject
+/**
+ * This class represents those rectangles fallinf from destroed brick. If one of
+ * them is picked, player is rewaded with some upgrade!
+ * 
+ * @author Antek
+ *
+ */
+public class FallingUpgrade extends MovableObject
 {
 	private String name;
+	private Upgrade upgrade;
 
 	/**
 	 * @return the name
@@ -29,8 +37,19 @@ public class FallingUpdate extends MovableObject
 		this.name = name;
 	}
 
+	public Upgrade getUpgrade()
+	{
+		return upgrade;
+	}
+
+	public void setUpgrade(Upgrade upgrade)
+	{
+		this.upgrade = upgrade;
+	}
+
 	/**
 	 * Constructor for falling upgrades.
+	 * 
 	 * @param color
 	 * @param x
 	 * @param y
@@ -42,20 +61,22 @@ public class FallingUpdate extends MovableObject
 	 * @param velocity
 	 * @param name
 	 */
-	public FallingUpdate(Color color, int x, int y, int width, int height, int directionX, int directionY, double ratio,
-			double velocity, String name)
+	public FallingUpgrade(Color color, int x, int y, int width, int height, int directionX, int directionY, double ratio,
+			double velocity, Upgrade upgr)
 	{
 		super(color, x, y, width, height, directionX, directionY, ratio, velocity);
-		this.name = name;
+		setUpgrade(upgr);
 
 	}
+
+
 
 	@Override
 	public void processCollision(GameObject go)
 	{
 		if (go instanceof Racket)
 		{
-			System.out.println("Got upgrade! " + name);
+			System.out.println("Got upgrade! " + getUpgrade().getName());
 			setDead(true);
 
 		}

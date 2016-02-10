@@ -1,18 +1,18 @@
 package Model;
 
-import java.awt.Dimension;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 
 import Controller.Controller;
-import Utils.Constants;
+import Model.Upgrade.FallingUpgrade;
 import Utils.FileManager;
 
 /**
  * Main class in Model package. Here all calculation are done and all data is
- * stored.Has no direct connection with View, everything happens
- * through Controller.
- * 
- * 
+ * stored.Has no direct connection with View, everything happens through
+ * Controller.
+ *
+ *
  * @author Antek
  *
  */
@@ -34,6 +34,8 @@ public class Model
 	private Player player;
 
 	private int currentLevel;
+
+	private PropertyChangeSupport pcs;
 
 	/**
 	 * @return the newBall
@@ -218,6 +220,17 @@ public class Model
 		this.currentLevel = currentLevel;
 	}
 
+	public PropertyChangeSupport getPcs()
+	{
+
+		return pcs;
+	}
+
+	public void setPcs(PropertyChangeSupport pcs)
+	{
+		this.pcs = pcs;
+	}
+
 	/**
 	 * Constructor for Model class. Uses GameFactory class for creating some
 	 * instances and add those to newly created lists of GameObjects.
@@ -241,6 +254,15 @@ public class Model
 
 		newBall = true;
 
+		setPcs(new PropertyChangeSupport(this));
+		initPcs();
+		getPlayer().setPcs(getPcs());
+
+	}
+
+	public void initPcs()
+	{
+		getPcs().addPropertyChangeListener("BiggerRacketUpgrade", getRacket());
 	}
 
 	/**
@@ -272,8 +294,8 @@ public class Model
 		setStillObjectList(nextLevel);
 		getGameObjectList().addAll(nextLevel);
 		setCurrentLevel(getCurrentLevel() + 1);
-
 		getMovableObjectList().clear();
+		getPlayer().resetUpgrades();
 
 	}
 
@@ -282,12 +304,18 @@ public class Model
 	 * where all calulations are made and objects are being moved, deleted or
 	 * created. If there is no visible change, method return false to stop View
 	 * from pointless refreshing.
-	 * 
+	 *
 	 * @return true, when visible change occurs
 	 */
 	public boolean update()
 	{
 		boolean isChanged = false;
+		getPlayer().updateUpgrades();
+		if (getRacket().getWidth() != getRacket().getDesiredWidth())
+		{
+			getRacket().grow();
+			isChanged = true;
+		}
 		if (getRacketDirection() != 0)
 		{
 			getRacket().move(getRacketDirection());
@@ -301,7 +329,7 @@ public class Model
 			setNewBall(false);
 			isChanged = true;
 		}
-
+		// PART FOR THE MOVABLE OBJECTS
 		for (int i = 0; i < getMovableObjectList().size(); i++)
 		{
 			MovableObject movOb = getMovableObjectList().get(i);
@@ -321,8 +349,12 @@ public class Model
 					continue;
 				}
 				if (movOb.collide(getRacket()))
+				{
 					movOb.processCollision(getRacket());
+					if (movOb instanceof FallingUpgrade)
+						getPlayer().addUpgrade(((FallingUpgrade) movOb).getUpgrade());
 
+				}
 				if (levelEmpty())
 				{
 					loadNextLevel();
@@ -335,17 +367,15 @@ public class Model
 					if (movOb.collide(stillOb))
 					{
 						movOb.processCollision(stillOb);
+
 						if (stillOb.gotHit(movOb))
 						{
 							remove(stillOb);
 							getPlayer().addPoints(10);
-							if (true) // TODO
+							if (true)
 							{
-								// TODO: factory.createFallingUpdate((Brick)
-								// stillOb);
-
+								factory.createFallingUpdate((Brick) stillOb);
 							}
-
 							k--;
 						}
 					}
@@ -358,7 +388,7 @@ public class Model
 
 	/**
 	 * Check if there are some bricks left.
-	 * 
+	 *
 	 * @return true, there is no more bricks to smash.
 	 */
 	private boolean levelEmpty()
@@ -376,7 +406,7 @@ public class Model
 	/**
 	 * Function called when specific gamObejct is being killed and therefore
 	 * should be deleted from list, which contains it.
-	 * 
+	 *
 	 * @param go
 	 *            - object to remove
 	 */
