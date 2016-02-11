@@ -2,33 +2,25 @@ package Model.Upgrade;
 
 import java.util.Date;
 
-/**
- * Class that represents Bigger racket upgrade. When player picks up Falling
- * Upgrade containing it, it starts to measure time.
- * 
- * 
- * @author Antek
- *
- */
 public class BiggerRacketUpgrade extends Upgrade
 {
-	private int duration;// how long the racket is wider
+	private int lenght;// how long the racket is wider
 	private long currentTime;
 
-	public BiggerRacketUpgrade(int duration, String name)
+	public BiggerRacketUpgrade(int lenght,String name)
 	{
 		setName(name);
-		setDuration(duration);
+		setLenght(lenght);
 	}
 
-	public int getDuration()
+	public int getLenght()
 	{
-		return duration;
+		return lenght;
 	}
 
-	public void setDuration(int time)
+	public void setLenght(int time)
 	{
-		this.duration = time;
+		this.lenght = time;
 	}
 
 	public long getCurrentTime()
@@ -44,7 +36,10 @@ public class BiggerRacketUpgrade extends Upgrade
 	@Override
 	public boolean isOver()
 	{
-		return (System.currentTimeMillis() - currentTime > duration * 1000);
+		if (System.currentTimeMillis() - currentTime > lenght * 1000)
+			return true;
+		else
+			return false;
 	}
 
 	@Override

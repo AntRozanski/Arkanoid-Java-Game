@@ -2,9 +2,6 @@ package Model;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 
 import Model.Upgrade.BiggerRacketUpgrade;
@@ -20,14 +17,11 @@ import Utils.Constants;
  * @author Antek
  *
  */
-public class GameFactory implements PropertyChangeListener
+public class GameFactory
 {
-
 	private ArrayList<GameObject> GameObjectList;
 	private ArrayList<MovableObject> MovableObjectList;
 	private ArrayList<StillObject> StillObjectList;
-
-	private PropertyChangeSupport pcs;
 
 	/**
 	 * @return the gameObjectList
@@ -80,16 +74,6 @@ public class GameFactory implements PropertyChangeListener
 		StillObjectList = stillObjectList;
 	}
 
-	public PropertyChangeSupport getPcs()
-	{
-		return pcs;
-	}
-
-	public void setPcs(PropertyChangeSupport pcs)
-	{
-		this.pcs = pcs;
-	}
-
 	/**
 	 * Contructor of GamaFactory. Parameters below are lists, where newly
 	 * created object will be placed.
@@ -99,13 +83,11 @@ public class GameFactory implements PropertyChangeListener
 	 * @param StillObjectList
 	 */
 	public GameFactory(ArrayList<GameObject> GameObjectList, ArrayList<MovableObject> MovableObjectList,
-			ArrayList<StillObject> StillObjectList, PropertyChangeSupport prc)
+			ArrayList<StillObject> StillObjectList)
 	{
 		this.GameObjectList = GameObjectList;
 		this.MovableObjectList = MovableObjectList;
 		this.StillObjectList = StillObjectList;
-		setPcs(prc);
-		getPcs().addPropertyChangeListener("AdditionalBallsUpgrade", this);
 	}
 
 	/**
@@ -126,52 +108,7 @@ public class GameFactory implements PropertyChangeListener
 		getGameObjectList().add(ball);
 		getMovableObjectList().add(ball);
 
-		// getPcs().addPropertyChangeListener("AdditionalBallsUpgrade", ball);
-
 		return ball;
-	}
-
-	/**
-	 * Creates additional balls when AdditionalBallsUpgrade is picked. Newly
-	 * created balls appear on top of the origin ball and have sligty different
-	 * X nad Y velocities.
-	 *
-	 * @param ob
-	 *            - origin ball
-	 * @param numBalls
-	 *            - number of new balls
-	 */
-	public void createBalls(Ball ob, int numBalls)
-	{
-		double dispersionZone = 0.50;
-		for (int i = 1; i <= numBalls; i++)
-		{
-			System.out.println("additional ball no. " + i + " created! whoa");
-			int dirX = ob.getDirectionX();
-			int dirY = ob.getDirectionY();
-
-			double ratio = ob.getRatio() + (Math.pow(-1, i) * dispersionZone / (numBalls / 2));
-			if (ratio > 1)
-			{
-				ratio -= 1;
-				dirX = ob.getDirectionX() * (-1);
-			}
-			if (ratio < 0)
-			{
-				ratio = 2 - ratio;
-				dirY = ob.getDirectionY() * (-1);
-			}
-
-			Ball ball = new Ball(Color.white, ob.getX(), ob.getY(), Constants.STANDARD_BALL_RADIUS * 2,
-					Constants.STANDARD_BALL_RADIUS * 2, Constants.STANDARD_BALL_RADIUS, dirX, dirY, ratio,
-					Constants.STANDARD_BALL_SPEED);
-
-			getGameObjectList().add(ball);
-			getMovableObjectList().add(ball);
-
-			getPcs().addPropertyChangeListener("AdditionalBallsUpgrade", ball);
-
-		}
 	}
 
 	/**
@@ -187,11 +124,8 @@ public class GameFactory implements PropertyChangeListener
 				((int) (dim.getHeight() - Constants.STANDARD_RACKET_HEIGHT)), Constants.STANDARD_RACKET_WIDTH,
 				Constants.STANDARD_RACKET_HEIGHT, Constants.STANDARD_RACKET_SPEED);
 		getGameObjectList().add(racket);
-
-		getPcs().addPropertyChangeListener("BiggerRacketUpgrade", racket);
-		getPcs().addPropertyChangeListener("SmallerRacketUpgrade", racket);
-
 		return racket;
+
 	}
 
 	/**
@@ -331,18 +265,18 @@ public class GameFactory implements PropertyChangeListener
 		double r = Math.random();
 		Color color;
 		Upgrade upgr;
-		/*
-		 * if (r > 0.5) { color = Color.green; upgr = new
-		 * BiggerRacketUpgrade(Constants.BIGGER_RACKET_UPGRADE_TIME,
-		 * "BiggerRacketUpgrade"); } else { color = Color.cyan; upgr = new
-		 * BiggerRacketUpgrade(Constants.BIGGER_RACKET_UPGRADE_TIME,
-		 * "SmallerRacketUpgrade"); }
-		 */
-		color = Color.pink;
-		upgr = new BiggerRacketUpgrade(Constants.BIGGER_RACKET_UPGRADE_TIME, "AdditionalBallsUpgrade");
+		if(r > 0.5)
+		{
+			color = Color.green;
+			upgr = new BiggerRacketUpgrade(Constants.BIGGER_RACKET_UPGRADE_TIME, "BiggerRacketUpgrade");
+		}
+		else
+		{
+			color = Color.cyan;
+			upgr = new BiggerRacketUpgrade(Constants.BIGGER_RACKET_UPGRADE_TIME,"SmallerRacketUpgrade");
+		}
 		FallingUpgrade fu = new FallingUpgrade(color, b.getX() + (b.getWidth() - Constants.STANDARD_UPGRADE_SIZE) / 2,
-				b.getY(), Constants.STANDARD_UPGRADE_SIZE, Constants.STANDARD_UPGRADE_SIZE, 0, 1, 0.0,
-				Constants.STANDARD_UPGRADE_SPEED, upgr);
+				b.getY(), Constants.STANDARD_UPGRADE_SIZE, Constants.STANDARD_UPGRADE_SIZE, 0, 1, 0.0, 0.5, upgr);
 		fu.setMoving(true);
 		getMovableObjectList().add(fu);
 		getGameObjectList().add(fu);
@@ -360,32 +294,6 @@ public class GameFactory implements PropertyChangeListener
 
 		Color color = new Color(b, r, g);
 		return color;
-	}
-
-	@Override
-	public void propertyChange(PropertyChangeEvent evt)
-	{
-		if (evt.getPropertyName() == "AdditionalBallsUpgrade")
-		{
-			System.out.println("sure!");
-			if ((Boolean) evt.getNewValue() == true)
-			{
-				int k = getMovableObjectList().size();
-				for (int i = 0; i < k; i++)
-				{
-					MovableObject mo = getMovableObjectList().get(i);
-					if (mo instanceof Ball || mo.isMoving() || (mo.getColor() != Color.white))
-					{
-						if(mo instanceof FallingUpgrade)
-							continue;
-						System.out.println("what?");
-						createBalls((Ball)mo, 4);
-
-					}
-				}
-			}
-		}
-
 	}
 
 }

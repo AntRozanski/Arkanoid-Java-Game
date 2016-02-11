@@ -16,7 +16,7 @@ public abstract class MovableObject extends GameObject
 	private double velocity;
 	/**
 	 * this field, comprising in the range 0 - 1, provide information what part
-	 * of velocity vector is laying on x-axis.
+	 * of velocity vector is laying on y-axis.
 	 */
 	private double ratio;
 
@@ -401,7 +401,6 @@ public abstract class MovableObject extends GameObject
 	{
 
 		setRatio(Math.abs(ratio));
-		
 		setX_speed(Math.sqrt(getRatio()) * getVelocity());
 		setY_speed(Math.sqrt(1 - getRatio()) * getVelocity());
 

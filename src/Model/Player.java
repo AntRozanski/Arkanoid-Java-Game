@@ -113,15 +113,6 @@ public class Player
 		setPoints(getPoints() + num);
 	}
 
-	/**
-	 * Ads given upgrade to the list. If there is already an instance of the
-	 * upgrade of the same class as given upgrade, old instance is replaced.
-	 *
-	 * It also trigger start() method on the upgrade and PropertyChangeSupport
-	 * to notify its listeners about new upgrade in the game.
-	 *
-	 * @param upgr
-	 */
 	public void addUpgrade(Upgrade upgr)
 	{
 
@@ -139,7 +130,6 @@ public class Player
 		}
 		if (i == getListOfUpgrades().size())
 			getListOfUpgrades().add(upgr);
-		System.out.println("Dodano upgr! " + upgr.getName());
 
 		upgr.start();
 		getPcs().firePropertyChange(upgr.getName(), false, true);
@@ -162,7 +152,7 @@ public class Player
 
 	public void resetUpgrades()
 	{
-		for (Upgrade upgr : getListOfUpgrades())
+		for(Upgrade upgr: getListOfUpgrades())
 			getPcs().firePropertyChange(upgr.getName(), true, false);
 
 		getListOfUpgrades().clear();
