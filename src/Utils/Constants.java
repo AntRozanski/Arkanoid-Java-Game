@@ -19,13 +19,14 @@ public final class Constants
 
 	public static final int STANDARD_BALL_RADIUS = 11;
 
-	public final static int STANDARD_RACKET_WIDTH = 190;
+	public final static int STANDARD_RACKET_WIDTH = 800;
 	public static final int STANDARD_RACKET_HEIGHT = 25;
 
 	public final static int STANDARD_WALL_WIDTH = 10;
 
 	public final static int STANDARD_UPGRADE_SIZE = 30;
-	public final static int STANDARD_BALL_SPEED = 6;
+	public final static int STANDARD_UPGRADE_SPEED = 4;
+	public final static int STANDARD_BALL_SPEED = 1;
 	public final static int STANDARD_HP = 12220;
 
 	public final static int GAME_LOOP_TIME = 10000000;

@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeEvent;
 
 import Utils.Constants;
 
@@ -155,6 +156,15 @@ public class Ball extends MovableObject
 	{
 		g.setColor(getColor());
 		g.fillOval(getX(), getY(), getWidth(), getHeight());
+	}
+	@Override
+	public void propertyChange(PropertyChangeEvent evt)
+	{
+		if (evt.getPropertyName() == "AdditionalBallsUpgrade")
+		{
+			if ((Boolean) evt.getNewValue() == false)
+				setDead(true);
+		}
 	}
 
 }

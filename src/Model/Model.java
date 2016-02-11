@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import Controller.Controller;
 import Model.Upgrade.FallingUpgrade;
+import Utils.Constants;
 import Utils.FileManager;
 
 /**
@@ -242,9 +243,11 @@ public class Model
 		setMovableObjectList(new ArrayList<MovableObject>());
 		setStillObjectList(new ArrayList<StillObject>());
 
-		setFactory(new GameFactory(GameObjectList, MovableObjectList, StillObjectList));
+		setPcs(new PropertyChangeSupport(this));
+		setFactory(new GameFactory(GameObjectList, MovableObjectList, StillObjectList, getPcs()));
 
 		setPlayer(getFactory().createPlayer());
+		getPlayer().setPcs(getPcs());
 		setRacket(getFactory().createRacket());
 		getFactory().createWalls();
 		loadNextLevel();
@@ -254,17 +257,6 @@ public class Model
 
 		newBall = true;
 
-		setPcs(new PropertyChangeSupport(this));
-		initPcs();
-		getPlayer().setPcs(getPcs());
-
-	}
-
-	public void initPcs()
-	{
-		getPcs().addPropertyChangeListener("BiggerRacketUpgrade", getRacket());
-		getPcs().addPropertyChangeListener("SmallerRacketUpgrade", getRacket());
-	
 	}
 
 	/**
@@ -313,6 +305,7 @@ public class Model
 	{
 		boolean isChanged = false;
 		getPlayer().updateUpgrades();
+
 		if (getRacket().getWidth() != getRacket().getDesiredWidth())
 		{
 			getRacket().grow();
@@ -326,8 +319,8 @@ public class Model
 		}
 
 		if (isNewBall())
-		{	//TODO
-			getPcs().addPropertyChangeListener("BiggerRacketUpgrade",getFactory().createBall(racket));
+		{ // TODO
+			getFactory().createBall(racket);
 			setNewBall(false);
 			isChanged = true;
 		}
@@ -342,7 +335,7 @@ public class Model
 				{
 					remove(movOb);
 					i--;
-					if (movOb instanceof Ball)
+					if (movOb instanceof Ball || movOb.getY() > Constants.STANDARD_ARENA_HEIGHT)
 						if (getPlayer().decreaseHP())
 						{
 							getController().setOver(true);
