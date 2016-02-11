@@ -195,21 +195,12 @@ public abstract class GameObject implements Serializable, PropertyChangeListener
 	 * Provide information how that Gameobject should be drawn.
 	 */
 	public abstract void draw(Graphics g);
+	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt)
 	{
-		if (evt.getPropertyName() == "BiggerRacketUpgrade")
-		{
-			if ((Boolean) evt.getNewValue() == true)
-			{
-				setColor(Color.white);
-			}
-			else
-			{
-				setColor(Color.black);
-			}
-		}
 
 	}
+	
 
 }
