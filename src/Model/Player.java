@@ -132,8 +132,9 @@ public class Player
 			{
 				if (getListOfUpgrades().get(i).getClass() == upgr.getClass())
 				{
-					getListOfUpgrades().set(i, upgr);
-					break;
+					return;
+					//getListOfUpgrades().set(i, upgr);
+					//break;
 				}
 			}
 		}

@@ -26,7 +26,7 @@ public final class Constants
 
 	public final static int STANDARD_UPGRADE_SIZE = 30;
 	public final static int STANDARD_UPGRADE_SPEED = 4;
-	public final static int STANDARD_BALL_SPEED = 1;
+	public final static int STANDARD_BALL_SPEED = 2;
 	public final static int STANDARD_HP = 12220;
 
 	public final static int GAME_LOOP_TIME = 10000000;

@@ -11,6 +11,7 @@ import Model.Upgrade.BiggerRacketUpgrade;
 import Model.Upgrade.FallingUpgrade;
 import Model.Upgrade.Upgrade;
 import Utils.Constants;
+import Utils.FileManager;
 
 /**
  *
@@ -109,8 +110,8 @@ public class GameFactory implements PropertyChangeListener
 	}
 
 	/**
-	 * This function creates new ball on top of the racket, and adds it to the
-	 * proper lists
+	 * This function creates new ball on top of the racket (ball is NOT moving),
+	 * and adds it to the proper lists.
 	 *
 	 * @param racket,
 	 *            wchich coordinates are used to place new Ball
@@ -143,29 +144,34 @@ public class GameFactory implements PropertyChangeListener
 	 */
 	public void createBalls(Ball ob, int numBalls)
 	{
-		double dispersionZone = 0.50;
+		double dispersionZone = 0.40;
+		System.out.println(
+				"ratio pilki-matki " + ob.getRatio() + "X_dir" + ob.getDirectionX() + " Y_dir " + ob.getDirectionY());
 		for (int i = 1; i <= numBalls; i++)
 		{
 			System.out.println("additional ball no. " + i + " created! whoa");
 			int dirX = ob.getDirectionX();
 			int dirY = ob.getDirectionY();
 
-			double ratio = ob.getRatio() + (Math.pow(-1, i) * dispersionZone / (numBalls / 2));
+			double ratio = ob.getRatio()
+					+ (Math.pow(-1, i) * ((dispersionZone / numBalls) * (1 + ((int) (i - 1) / 2))));
+			System.out.println("pilka nr " + i + ", moje ratio to!" + ratio);
 			if (ratio > 1)
-			{
-				ratio -= 1;
-				dirX = ob.getDirectionX() * (-1);
-			}
-			if (ratio < 0)
 			{
 				ratio = 2 - ratio;
 				dirY = ob.getDirectionY() * (-1);
 			}
-
+			if (ratio < 0)
+			{
+				ratio = -ratio;
+				dirX = ob.getDirectionX() * (-1);
+			}
+			System.out.println("pilka nr " + i + ",A moje nowe ratio to!" + ratio + "X_dir" + dirX + " Y_dir " + dirY);
+			FileManager.sleep(100);
 			Ball ball = new Ball(Color.white, ob.getX(), ob.getY(), Constants.STANDARD_BALL_RADIUS * 2,
 					Constants.STANDARD_BALL_RADIUS * 2, Constants.STANDARD_BALL_RADIUS, dirX, dirY, ratio,
 					Constants.STANDARD_BALL_SPEED);
-
+			ball.setMoving(true);
 			getGameObjectList().add(ball);
 			getMovableObjectList().add(ball);
 
@@ -376,10 +382,10 @@ public class GameFactory implements PropertyChangeListener
 					MovableObject mo = getMovableObjectList().get(i);
 					if (mo instanceof Ball || mo.isMoving() || (mo.getColor() != Color.white))
 					{
-						if(mo instanceof FallingUpgrade)
+						if (mo instanceof FallingUpgrade)
 							continue;
 						System.out.println("what?");
-						createBalls((Ball)mo, 4);
+						createBalls((Ball) mo, 2);
 
 					}
 				}
