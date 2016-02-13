@@ -175,6 +175,14 @@ public class InputController
 			{
 				getModel().setNewBall(true);
 			}
+			if (ke.getKeyCode() == KeyEvent.VK_S)
+			{
+				getModel().getPcs().firePropertyChange("AdditionalBallsUpgrade", false, true);
+			}
+			if (ke.getKeyCode() == KeyEvent.VK_X)
+			{
+				getModel().getPcs().firePropertyChange("AdditionalBallsUpgrade", true, false);
+			}
 		}
 
 	}

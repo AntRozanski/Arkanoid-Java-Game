@@ -5,8 +5,8 @@ import java.util.Date;
 /**
  * Class that represents Bigger racket upgrade. When player picks up Falling
  * Upgrade containing it, it starts to measure time.
- * 
- * 
+ *
+ *
  * @author Antek
  *
  */

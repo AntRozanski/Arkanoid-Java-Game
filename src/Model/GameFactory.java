@@ -144,32 +144,39 @@ public class GameFactory implements PropertyChangeListener
 	 */
 	public void createBalls(Ball ob, int numBalls)
 	{
-		double dispersionZone = 0.40;
-		System.out.println(
-				"ratio pilki-matki " + ob.getRatio() + "X_dir" + ob.getDirectionX() + " Y_dir " + ob.getDirectionY());
+		double dispersionZone = Math.PI/2 ;
+
+
+		double X_axisVector = ob.getX_speed() * ob.getDirectionX() / ob.getVelocity();
+		double Y_axisVector = (-1) * ob.getY_speed() * ob.getDirectionY() / ob.getVelocity();
+
+		System.out.println("pilka - matka: angle" + Math.toDegrees(Math.atan2(Y_axisVector, X_axisVector)) + " X_axis" + X_axisVector
+				+ " Y_axis " + Y_axisVector);
 		for (int i = 1; i <= numBalls; i++)
 		{
-			System.out.println("additional ball no. " + i + " created! whoa");
-			int dirX = ob.getDirectionX();
-			int dirY = ob.getDirectionY();
-
-			double ratio = ob.getRatio()
+			// System.out.println("additional ball no. " + i + " created!
+			// whoa");
+		int dirX = 1;
+		int dirY = -1;
+			double angle = Math.atan2(Y_axisVector, X_axisVector)
 					+ (Math.pow(-1, i) * ((dispersionZone / numBalls) * (1 + ((int) (i - 1) / 2))));
-			System.out.println("pilka nr " + i + ", moje ratio to!" + ratio);
-			if (ratio > 1)
-			{
-				ratio = 2 - ratio;
-				dirY = ob.getDirectionY() * (-1);
-			}
-			if (ratio < 0)
-			{
-				ratio = -ratio;
-				dirX = ob.getDirectionX() * (-1);
-			}
-			System.out.println("pilka nr " + i + ",A moje nowe ratio to!" + ratio + "X_dir" + dirX + " Y_dir " + dirY);
-			FileManager.sleep(100);
+
+			double X_vect = Math.cos(angle);
+			double Y_vect = Math.sin(angle);
+			if (X_vect < 0)
+				dirX = -1;
+			if (Y_vect < 0)
+				dirY = 1;
+			System.out.println("pilka nr " + i + "angle : " +Math.toDegrees( angle )+ "X_v " + X_vect + "Y_v :" + Y_vect);
+			/*
+			 * if (ratio > 1) { ratio = 2 - ratio; dirY = ob.getDirectionY() *
+			 * (-1); } if (ratio < 0) { ratio = -ratio; dirX =
+			 * ob.getDirectionX() * (-1); }
+			 */
+			// System.out.println("pilka nr " + i + ",A moje nowe ratio to!" +
+			// ratio + "X_dir" + dirX + " Y_dir " + dirY);
 			Ball ball = new Ball(Color.white, ob.getX(), ob.getY(), Constants.STANDARD_BALL_RADIUS * 2,
-					Constants.STANDARD_BALL_RADIUS * 2, Constants.STANDARD_BALL_RADIUS, dirX, dirY, ratio,
+					Constants.STANDARD_BALL_RADIUS * 2, Constants.STANDARD_BALL_RADIUS, dirX, dirY, Math.pow(X_vect, 2),
 					Constants.STANDARD_BALL_SPEED);
 			ball.setMoving(true);
 			getGameObjectList().add(ball);
@@ -333,7 +340,7 @@ public class GameFactory implements PropertyChangeListener
 	 *            - destroyed brick: the origin of fallingUpgrade
 	 */
 	public void createFallingUpdate(Brick b)
-	{
+	{	
 		double r = Math.random();
 		Color color;
 		Upgrade upgr;
@@ -385,7 +392,7 @@ public class GameFactory implements PropertyChangeListener
 						if (mo instanceof FallingUpgrade)
 							continue;
 						System.out.println("what?");
-						createBalls((Ball) mo, 2);
+						createBalls((Ball) mo, 4);
 
 					}
 				}

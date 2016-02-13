@@ -347,7 +347,7 @@ public class Model
 				{
 					movOb.processCollision(getRacket());
 					if (movOb instanceof FallingUpgrade)
-						getPlayer().addUpgrade(((FallingUpgrade) movOb).getUpgrade());
+						System.out.println("to poprawic(modelupdate");//getPlayer().addUpgrade(((FallingUpgrade) movOb).getUpgrade());
 
 				}
 				if (levelEmpty())
