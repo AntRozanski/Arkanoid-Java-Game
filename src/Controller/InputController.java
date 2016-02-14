@@ -183,6 +183,22 @@ public class InputController
 			{
 				getModel().getPcs().firePropertyChange("AdditionalBallsUpgrade", true, false);
 			}
+			if (ke.getKeyCode() == KeyEvent.VK_A)
+			{
+				getModel().getPcs().firePropertyChange("RampageUpgrade", false, true);
+			}
+			if (ke.getKeyCode() == KeyEvent.VK_Z)
+			{
+				getModel().getPcs().firePropertyChange("RampageUpgrade", true, false);
+			}
+			if (ke.getKeyCode() == KeyEvent.VK_Q)
+			{
+				getModel().getPcs().firePropertyChange("MissilesUpgrade", false, true);
+			}
+			if (ke.getKeyCode() == KeyEvent.VK_SPACE)
+			{
+				getModel().fireMissile();
+			}
 		}
 
 	}

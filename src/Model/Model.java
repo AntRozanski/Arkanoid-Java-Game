@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import Controller.Controller;
 import Model.Upgrade.FallingUpgrade;
+import Model.Upgrade.Missile;
 import Utils.Constants;
 import Utils.FileManager;
 
@@ -38,154 +39,91 @@ public class Model
 
 	private PropertyChangeSupport pcs;
 
-	/**
-	 * @return the newBall
-	 */
 	public boolean isNewBall()
 	{
 		return newBall;
 	}
 
-	/**
-	 * @param newBall
-	 *            the newBall to set
-	 */
 	public void setNewBall(boolean newBall)
 	{
 		this.newBall = newBall;
 	}
 
-	/**
-	 * @return the racketDirection
-	 */
 	public int getRacketDirection()
 	{
 		return racketDirection;
 	}
 
-	/**
-	 * @param racketDirection
-	 *            the racketDirection to set
-	 */
 	public void setRacketDirection(int racketDirection)
 	{
 		this.racketDirection = racketDirection;
 	}
 
-	/**
-	 * @return the objectList
-	 */
 	public ArrayList<GameObject> getGameObjectList()
 	{
 		return GameObjectList;
 	}
 
-	/**
-	 * @param objectList
-	 *            the objectList to set
-	 */
 	public void setGameObjectList(ArrayList<GameObject> objectList)
 	{
 		this.GameObjectList = objectList;
 	}
 
-	/**
-	 * @return the movableObjectList
-	 */
 	public ArrayList<MovableObject> getMovableObjectList()
 	{
 		return MovableObjectList;
 	}
 
-	/**
-	 * @param movableObjectList
-	 *            the movableObjectList to set
-	 */
 	public void setMovableObjectList(ArrayList<MovableObject> movableObjectList)
 	{
 		MovableObjectList = movableObjectList;
 	}
 
-	/**
-	 * @return the stillObjectList
-	 */
 	public ArrayList<StillObject> getStillObjectList()
 	{
 		return StillObjectList;
 	}
 
-	/**
-	 * @param stillObjectList
-	 *            the stillObjectList to set
-	 */
 	public void setStillObjectList(ArrayList<StillObject> stillObjectList)
 	{
 		StillObjectList = stillObjectList;
 	}
 
-	/**
-	 * @return the factory
-	 */
 	public GameFactory getFactory()
 	{
 		return factory;
 	}
 
-	/**
-	 * @param factory
-	 *            the factory to set
-	 */
 	public void setFactory(GameFactory factory)
 	{
 		this.factory = factory;
 	}
 
-	/**
-	 * @return the controller
-	 */
 	public Controller getController()
 	{
 		return controller;
 	}
 
-	/**
-	 * @param controller
-	 *            the controller to set
-	 */
 	public void setController(Controller controller)
 	{
 		this.controller = controller;
 	}
 
-	/**
-	 * @return the racket
-	 */
 	public Racket getRacket()
 	{
 		return racket;
 	}
 
-	/**
-	 * @param racket
-	 *            the racket to set
-	 */
 	public void setRacket(Racket racket)
 	{
 		this.racket = racket;
 	}
 
-	/**
-	 * @return the player
-	 */
 	public Player getPlayer()
 	{
 		return player;
 	}
 
-	/**
-	 * @param player
-	 *            the player to set
-	 */
 	public void setPlayer(Player player)
 	{
 		this.player = player;
@@ -319,8 +257,8 @@ public class Model
 		}
 
 		if (isNewBall())
-		{ // TODO
-			getFactory().createBall(racket);
+		{
+			 getFactory().createBall(racket);
 			setNewBall(false);
 			isChanged = true;
 		}
@@ -347,7 +285,11 @@ public class Model
 				{
 					movOb.processCollision(getRacket());
 					if (movOb instanceof FallingUpgrade)
-						System.out.println("to poprawic(modelupdate");//getPlayer().addUpgrade(((FallingUpgrade) movOb).getUpgrade());
+					{
+						getPlayer().addUpgrade(((FallingUpgrade) movOb).getUpgrade());
+						getPlayer().addPoints(10);
+						isChanged=true;
+					}
 
 				}
 				if (levelEmpty())
@@ -366,7 +308,7 @@ public class Model
 						if (stillOb.gotHit(movOb))
 						{
 							remove(stillOb);
-							getPlayer().addPoints(10);
+							getPlayer().addPoints(20);
 							if (true)
 							{
 								factory.createFallingUpdate((Brick) stillOb);
@@ -432,24 +374,36 @@ public class Model
 		{
 			if (!movOb.isMoving())
 			{
-				if (movOb instanceof Ball)
-					movOb.setCoordinates(
-							(int) (getRacket().getX() + (getRacket().getWidth() / 2)) - (((Ball) movOb).getRadius()),
-							(int) (getRacket().getY() - ((Ball) movOb).getRadius() * 2));
+				// if (movOb instanceof Ball)
+				movOb.setCoordinates((int) (getRacket().getX() + (getRacket().getWidth() / 2)) - (movOb.getWidth() / 2),
+						(int) (getRacket().getY() - movOb.getHeight()));
 			}
 		}
 
 	}
 
 	/**
-	 * Fire one ball from racket, if there is any ball on the racket.
+	 * Fires one ball from the racket, if there is any ball.
 	 */
 	public void shootBall()
 	{
 		for (int i = 0; i < getMovableObjectList().size(); i++)
 		{
 			MovableObject movOb = getMovableObjectList().get(i);
-			if (!movOb.isMoving())
+			if (movOb.getClass() == Ball.class && !movOb.isMoving())
+			{
+				movOb.setMoving(true);
+				break;
+			}
+		}
+	}
+
+	public void fireMissile()
+	{
+		for (int i = 0; i < getMovableObjectList().size(); i++)
+		{
+			MovableObject movOb = getMovableObjectList().get(i);
+			if (movOb.getClass() == Missile.class && !movOb.isMoving())
 			{
 				movOb.setMoving(true);
 				break;

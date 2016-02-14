@@ -11,8 +11,10 @@ import Utils.Constants;
 
 /**
  *
- * Class for balls - object that bounces off the racket and destroy bricks. It
- * has additional field - radius to make calculations more clear.
+ * Class for balls - object that bounces off the racket and destroys bricks. It
+ * has additional field - radius to make calculations more clear. Boolean filed
+ * 'rampage' indicates if the ball in under influence of the 'RampageUpgrade'
+ * (in that mode ball don't bounces off the bricks).
  *
  * @author Antek
  *
@@ -21,6 +23,7 @@ public class Ball extends MovableObject
 {
 
 	private int radius;
+	private boolean rampage;
 
 	/**
 	 * @return the radius
@@ -39,11 +42,22 @@ public class Ball extends MovableObject
 		this.radius = radius;
 	}
 
+	public boolean isRampage()
+	{
+		return rampage;
+	}
+
+	public void setRampage(boolean rampage)
+	{
+		this.rampage = rampage;
+	}
+
 	public Ball(Color color, int x, int y, int width, int height, int radius, int directionX, int directionY,
 			double ratio, double velocity)
 	{
 		super(color, x, y, width, height, directionX, directionY, ratio, velocity);
 		this.setRadius(radius);
+		this.setRampage(false);
 	}
 
 	@Override
@@ -80,20 +94,23 @@ public class Ball extends MovableObject
 
 	public void processCollision(GameObject go)
 	{
+		if (isRampage() && !(go instanceof UnmovableBrick || go.getClass() == Racket.class))
+			return;
 
 		if (sideCollide(go)) // if collison is at side of GameObject
 		{
 			if (upperCollide(go) || lowerCollide(go)) // and also(!)on
 														// top or bottom
 			{
-				if (moreAtSide(go)) // if bigger part of ball is on the side
+				if (moreAtSide(go)) // if bigger part of ball is on the
+									// side
 				{
 					changeDirectionX(go);
 
 				}
 				else// if bigger part of ball is on the top / bottom
 				{
-					if (go instanceof Racket)
+					if (go.getClass() == Racket.class)
 						bounce((Racket) (go));
 
 					changeDirectionY(go);
@@ -157,6 +174,7 @@ public class Ball extends MovableObject
 		g.setColor(getColor());
 		g.fillOval(getX(), getY(), getWidth(), getHeight());
 	}
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt)
 	{
@@ -164,6 +182,21 @@ public class Ball extends MovableObject
 		{
 			if ((Boolean) evt.getNewValue() == false)
 				setDead(true);
+		}
+		if (evt.getPropertyName() == "RampageUpgrade")
+		{
+
+			if ((Boolean) evt.getNewValue() == true)
+			{
+				setRampage(true);
+				setColor(Color.red);
+			}
+			else
+			{
+				setRampage(false);
+				setColor(Color.black);
+			}
+
 		}
 	}
 

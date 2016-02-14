@@ -11,12 +11,12 @@ import java.awt.Graphics;
  * @author Antek
  *
  */
-public class Wall extends StillObject
+public class Wall extends UnmovableBrick
 {
 
-	public Wall(Color color, int x, int y, int width, int height, boolean isRemovable)
+	public Wall(Color color, int x, int y, int width, int height)
 	{
-		super(color, x, y, width, height, isRemovable);
+		super(color, x, y, width, height);
 
 	}
 

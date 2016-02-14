@@ -36,4 +36,6 @@ public final class Constants
 	public static final int BIGGER_UPGRADE_RACKET_WIDTH = 400;
 	public static final int BIGGER_RACKET_UPGRADE_TIME = 2;
 	public static final int SMALLER_UPGRADE_RACKET_WIDTH = 80;
+	public static final int STANDARD_MISSILE_SPEED = 2;
+	public static final int NUMBER_OF_MISSILES = 3;
 }

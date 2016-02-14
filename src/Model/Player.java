@@ -124,7 +124,7 @@ public class Player
 	 */
 	public void addUpgrade(Upgrade upgr)
 	{
-
+		
 		int i = 0;
 		if (!getListOfUpgrades().isEmpty())
 		{
@@ -132,9 +132,9 @@ public class Player
 			{
 				if (getListOfUpgrades().get(i).getClass() == upgr.getClass())
 				{
-					return;
-					//getListOfUpgrades().set(i, upgr);
-					//break;
+					
+					getListOfUpgrades().set(i, upgr);
+					break;
 				}
 			}
 		}
