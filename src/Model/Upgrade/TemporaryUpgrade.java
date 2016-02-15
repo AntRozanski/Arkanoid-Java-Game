@@ -66,7 +66,8 @@ public class TemporaryUpgrade extends Upgrade
 
 	@Override
 	public boolean isOver()
-	{
+	{	
+		
 		return (System.currentTimeMillis() - getUpgrStartTime() - getPauseTime() > duration);
 	}
 

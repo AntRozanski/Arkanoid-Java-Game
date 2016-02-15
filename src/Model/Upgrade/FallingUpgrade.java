@@ -61,26 +61,19 @@ public class FallingUpgrade extends MovableObject
 	 * @param velocity
 	 * @param name
 	 */
-	public FallingUpgrade(Color color, int x, int y, int width, int height, int directionX, int directionY, double ratio,
-			double velocity, Upgrade upgr)
+	public FallingUpgrade(Color color, int x, int y, int width, int height, int directionX, int directionY,
+			double ratio, double velocity, Upgrade upgr)
 	{
 		super(color, x, y, width, height, directionX, directionY, ratio, velocity);
 		setUpgrade(upgr);
 
 	}
 
-
-
 	@Override
 	public void processCollision(GameObject go)
 	{
 		if (go instanceof Racket)
-		{
-			System.out.println("Got upgrade! " + getUpgrade().getName());
 			setDead(true);
-
-		}
-
 	}
 
 	public boolean toDelete()

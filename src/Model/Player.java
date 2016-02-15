@@ -157,7 +157,7 @@ public class Player
 		{
 			for (i = 0; i < getListOfUpgrades().size(); i++)
 			{
-				if (getListOfUpgrades().get(i).getClass() == upgr.getClass())
+				if (getListOfUpgrades().get(i).getName() == upgr.getName())
 				{
 					getListOfUpgrades().set(i, upgr);
 					break;
@@ -186,7 +186,7 @@ public class Player
 			{
 				Upgrade upgr = getListOfUpgrades().get(i);
 				if (upgr.isOver())
-				{
+				{System.out.println("koniec!: " + upgr.getName());
 					getPcs().firePropertyChange(upgr.getName(), true, false);
 					getListOfUpgrades().remove(i);
 					i--;

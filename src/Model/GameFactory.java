@@ -16,7 +16,7 @@ import Utils.Constants;
 /**
  *
  *
- * Class, where all of objects are made.
+ * Class where all of objects are made.
  *
  * @author Antek
  *
@@ -367,15 +367,25 @@ public class GameFactory implements PropertyChangeListener
 		double r = Math.random();
 		Color color;
 		Upgrade upgr;
-		/*
-		 * if (r > 0.5) { color = Color.green; upgr = new
-		 * BiggerRacketUpgrade(Constants.BIGGER_RACKET_UPGRADE_TIME,
-		 * "BiggerRacketUpgrade"); } else { color = Color.cyan; upgr = new
-		 * BiggerRacketUpgrade(Constants.BIGGER_RACKET_UPGRADE_TIME,
-		 * "SmallerRacketUpgrade"); }
-		 */
-		color = Color.pink;
-		upgr = new TemporaryUpgrade(Constants.BIGGER_RACKET_UPGRADE_TIME , "BiggerRacketUpgrade");
+		if (r < 0.1)
+		{
+			color = Color.green;
+			upgr = new TemporaryUpgrade(Constants.BIGGER_RACKET_UPGRADE_TIME, "BiggerRacketUpgrade");
+		}
+		else if (r >= 0.1 && r < 0.2)
+		{
+			color = Color.cyan;
+			upgr = new TemporaryUpgrade(Constants.BIGGER_RACKET_UPGRADE_TIME, "SmallerRacketUpgrade");
+		}
+
+		else if (r >= 0.2 && r < 0.3)
+		{
+			color = Color.pink;
+			upgr = new TemporaryUpgrade(Constants.RAMPAGE_UPGRADE_TIME, "RampageUpgrade");
+		}
+		else
+			return;
+
 		FallingUpgrade fu = new FallingUpgrade(color, b.getX() + (b.getWidth() - Constants.STANDARD_UPGRADE_SIZE) / 2,
 				b.getY(), Constants.STANDARD_UPGRADE_SIZE, Constants.STANDARD_UPGRADE_SIZE, 0, 1, 0.0,
 				Constants.STANDARD_UPGRADE_SPEED, upgr);
@@ -409,13 +419,11 @@ public class GameFactory implements PropertyChangeListener
 				for (int i = 0; i < k; i++)
 				{
 					MovableObject mo = getMovableObjectList().get(i);
-					if (mo.getClass()== Ball.class && mo.isMoving())
+					if (mo.getClass() == Ball.class && mo.isMoving())
 					{
 						if (mo instanceof FallingUpgrade)
 							continue;
-						System.out.println("what?");
 						createBalls((Ball) mo, 4);
-
 					}
 				}
 			}
@@ -427,7 +435,5 @@ public class GameFactory implements PropertyChangeListener
 			if ((Boolean) evt.getNewValue() == true)
 				createMissiles(getRacket());
 		}
-
 	}
-
 }
