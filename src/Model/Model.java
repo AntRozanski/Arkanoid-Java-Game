@@ -242,7 +242,8 @@ public class Model
 	public boolean update()
 	{
 		boolean isChanged = false;
-		getPlayer().updateUpgrades();
+		if(getPlayer().updateUpgrades())
+			isChanged=true;
 
 		if (getRacket().getWidth() != getRacket().getDesiredWidth())
 		{
@@ -258,7 +259,7 @@ public class Model
 
 		if (isNewBall())
 		{
-			 getFactory().createBall(racket);
+			getFactory().createBall(racket);
 			setNewBall(false);
 			isChanged = true;
 		}
@@ -288,7 +289,7 @@ public class Model
 					{
 						getPlayer().addUpgrade(((FallingUpgrade) movOb).getUpgrade());
 						getPlayer().addPoints(10);
-						isChanged=true;
+						isChanged = true;
 					}
 
 				}
@@ -370,9 +371,10 @@ public class Model
 	 */
 	public void moveItemOnRacket()
 	{
-		for (MovableObject movOb : getMovableObjectList())
+		for (int i = 0; i < getMovableObjectList().size(); i++)
 		{
-			if (!movOb.isMoving())
+			MovableObject movOb = getMovableObjectList().get(i);
+			if (!movOb.isMoving()) 
 			{
 				// if (movOb instanceof Ball)
 				movOb.setCoordinates((int) (getRacket().getX() + (getRacket().getWidth() / 2)) - (movOb.getWidth() / 2),

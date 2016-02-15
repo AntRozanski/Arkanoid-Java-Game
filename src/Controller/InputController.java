@@ -144,6 +144,7 @@ public class InputController
 			{
 				blockade = false;
 				getView().getLayeredPanel().getGlassPanel().stopPause();
+				getModel().getPlayer().stopPause();
 				getController().setRunning(true);
 			}
 		}

@@ -2,59 +2,117 @@ package Model.Upgrade;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 
 import Model.GameObject;
 import Model.MovableObject;
 
+/**
+ * Class represents an object fired from the Racket when player collects
+ * MissilesUpgrade and activate it (implicitly by pressing space). When missile
+ * hits the brick, 'explosion' damages also bricks around it. After hit, area
+ * covered by explosion stays visible for some amount of Model's update()
+ * function cycles. *
+ * 
+ * @author Antek
+ */
 public class Missile extends MovableObject
 {
-	private int x_coor[];
-	private int y_coor[];
 
-	public int[] getX_coor()
+	private boolean explosion;
+	private int counter;
+
+	public boolean isExplosion()
 	{
-		return x_coor;
+		return explosion;
 	}
 
-	public void setX_coor(int x_coor[])
+	public void setExplosion(boolean explosion)
 	{
-		this.x_coor = x_coor;
+		this.explosion = explosion;
 	}
 
-	public int[] getY_coor()
+	public int getCounter()
 	{
-		return y_coor;
+		return counter;
 	}
 
-	public void setY_coor(int y_coor[])
+	public void setCounter(int counter)
 	{
-		this.y_coor = y_coor;
+		this.counter = counter;
 	}
 
 	public Missile(Color color, int x, int y, int width, int height, int directionX, int directionY, double ratio,
 			double velocity)
 	{
 		super(color, x, y, width, height, directionX, directionY, ratio, velocity);
-		int x_co[] = { getX(), (getX() + getWidth()) / 2, getX() + getWidth() };
-		int y_co[] = { getY() + getHeight(), getY(), getY() + getHeight() };
-		setX_coor(x_co);
-		setY_coor(y_co);
-		System.out.println("im alive!");
+		setExplosion(false);
+		setCounter(0);
 	}
 
 	@Override
-
 	public void processCollision(GameObject go)
 	{
-		setDead(true);
+		if (!isExplosion()) // after first collision 'explosion' is created
+		{
+			setX(getX() - 45);
+			setY(getY() - 40);
+			setWidth(110);
+			setHeight(60);
+			setExplosion(true);
+		}
+
+	}
+
+	@Override
+	public Rectangle2D getBounds()
+	{
+		if (getCounter() > 0) // to ensure that bricks around target will be
+								// harmed only once by 'explosion'
+			return new Rectangle(0, 0, 0, 0);
+		else
+			return super.getBounds();
+	}
+
+	@Override
+	public void move()
+	{
+		if (!isExplosion())
+		{
+			if (isMoving())
+			{
+				setX_pos(getX_pos() + (getX_speed() * getDirectionX()));
+				setX((int) Math.round(getX_pos()));
+				setY_pos((getY_pos() + (getY_speed() * getDirectionY())));
+				setY((int) Math.round(getY_pos()));
+
+			}
+		}
+		else
+		{
+			if (getCounter() == 25)
+				setDead(true);
+			else
+				setCounter(getCounter() + 1);
+		}
+
 	}
 
 	@Override
 	public void draw(Graphics g)
 	{
-		g.setColor(getColor());
-		g.fillOval(getX(), getY(), getWidth(), getHeight());
-//		g.fillPolygon(getX_coor(), getY_coor(), 3);
+		if (!isExplosion())
+		{
+			g.setColor(getColor());
+			g.fillPolygon(new int[] { getX(), getX() + (getWidth()) / 2, getX() + getWidth() },
+					new int[] { getY() + getHeight(), getY(), getY() + getHeight() }, 3);
+		}
+		else
+		{
+			g.setColor(Color.red);
+			g.fillRect(getX(), getY(), getWidth(), getHeight());
+		}
 	}
 
 }

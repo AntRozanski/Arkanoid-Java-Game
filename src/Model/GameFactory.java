@@ -7,9 +7,9 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 
-import Model.Upgrade.BiggerRacketUpgrade;
 import Model.Upgrade.FallingUpgrade;
 import Model.Upgrade.Missile;
+import Model.Upgrade.TemporaryUpgrade;
 import Model.Upgrade.Upgrade;
 import Utils.Constants;
 
@@ -375,7 +375,7 @@ public class GameFactory implements PropertyChangeListener
 		 * "SmallerRacketUpgrade"); }
 		 */
 		color = Color.pink;
-		upgr = new BiggerRacketUpgrade(Constants.BIGGER_RACKET_UPGRADE_TIME * 10, "MissilesUpgrade");
+		upgr = new TemporaryUpgrade(Constants.BIGGER_RACKET_UPGRADE_TIME , "BiggerRacketUpgrade");
 		FallingUpgrade fu = new FallingUpgrade(color, b.getX() + (b.getWidth() - Constants.STANDARD_UPGRADE_SIZE) / 2,
 				b.getY(), Constants.STANDARD_UPGRADE_SIZE, Constants.STANDARD_UPGRADE_SIZE, 0, 1, 0.0,
 				Constants.STANDARD_UPGRADE_SPEED, upgr);
@@ -409,7 +409,7 @@ public class GameFactory implements PropertyChangeListener
 				for (int i = 0; i < k; i++)
 				{
 					MovableObject mo = getMovableObjectList().get(i);
-					if (mo instanceof Ball || mo.isMoving() || (mo.getColor() != Color.white))
+					if (mo.getClass()== Ball.class && mo.isMoving())
 					{
 						if (mo instanceof FallingUpgrade)
 							continue;

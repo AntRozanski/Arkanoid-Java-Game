@@ -89,10 +89,19 @@ public class PlayerPanel extends JPanel
 
 		String numBalls = new String("Balls left: " + getPlayer().getHealth());
 		String points = new String("Points: " + getPlayer().getPoints());
+		
 		Font f = new Font("monospaced", Font.BOLD, 16);
 		g.setFont(f);
 		g.drawString(numBalls, 10, 25);
 		g.drawString(points, Constants.STANDARD_ARENA_WIDTH - 150, 25);
+		long time = getPlayer().getUpgradeOverTime()-System.currentTimeMillis();
+		
+		if(time>0)
+		{
+			String timeString = new String("Upgrade time left: " + time/1000 + "." +  time/100);
+			g.drawString(timeString, 220, 25);
+
+		}
 
 	}
 }

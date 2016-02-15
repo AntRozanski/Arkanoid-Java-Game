@@ -196,6 +196,7 @@ public class Controller
 			if (isPause())
 			{
 				getView().getLayeredPanel().getGlassPanel().startPause();
+				getModel().getPlayer().startPause();
 				setPause(false);
 			}
 		}
@@ -203,8 +204,8 @@ public class Controller
 	}
 
 	/**
-	 * When level is finished, this function instructs View to render special dim
-	 * Jpanel with info about new level.
+	 * When level is finished, this function instructs View to render special
+	 * dim Jpanel with info about new level.
 	 */
 	private void showNextLevelDialog()
 	{
@@ -217,7 +218,8 @@ public class Controller
 	}
 
 	/**
-	 * Function called at the end of the game. Instructs View to show 'goodbye' view and best results.
+	 * Function called at the end of the game. Instructs View to show 'goodbye'
+	 * view and best results.
 	 */
 	public void endOfGame()
 	{
