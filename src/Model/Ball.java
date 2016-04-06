@@ -105,6 +105,7 @@ public class Ball extends MovableObject
 				if (moreAtSide(go)) // if bigger part of ball is on the
 									// side
 				{
+
 					changeDirectionX(go);
 
 				}
@@ -119,7 +120,10 @@ public class Ball extends MovableObject
 
 			}
 			else// only on the side
+			{
 				changeDirectionX(go);
+
+			}
 		}
 		else// not on the side
 		{
@@ -147,11 +151,13 @@ public class Ball extends MovableObject
 		Point stillObjectPoint;
 		Point ballCenterPoint = new Point(getX() + getRadius(), getY() + getRadius());
 		if (leftCollide(go))
-			stillObjectPoint = new Point((go.getX() + (go.getHeight() / 2)), (go.getY() + (go.getHeight() / 2)));
+			stillObjectPoint =
+					new Point((go.getX() + (go.getHeight() / 2)), (go.getY() + (go.getHeight() / 2)));
 		else
 			stillObjectPoint = new Point((go.getX() + go.getWidth() - (go.getHeight() / 2)),
 					(go.getY() + (go.getHeight() / 2)));
-		if (Math.abs(ballCenterPoint.x - stillObjectPoint.x) < Math.abs(ballCenterPoint.y - stillObjectPoint.y))
+		if (Math.abs(ballCenterPoint.x - stillObjectPoint.x) < Math
+				.abs(ballCenterPoint.y - stillObjectPoint.y))
 			return false;
 		else
 			return true;
@@ -194,7 +200,10 @@ public class Ball extends MovableObject
 			else
 			{
 				setRampage(false);
-				setColor(Color.black);
+				int b = (int) (Math.random() * 145);
+				int r = (int) (Math.random() * 145);
+				int g = (int) (Math.random() * 145);
+				setColor(new Color(b, r, g));
 			}
 
 		}

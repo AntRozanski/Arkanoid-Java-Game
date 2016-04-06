@@ -20,7 +20,7 @@ public class Player
 	private PropertyChangeSupport pcs;
 	private int health;
 	private int points;
-	private ArrayList<Upgrade> ListOfUpgrades;
+	private ArrayList<TemporaryUpgrade> ListOfUpgrades;
 	private long upgradeOverTime;
 	private long pauseStartTime;
 
@@ -58,12 +58,12 @@ public class Player
 		this.points = points;
 	}
 
-	public ArrayList<Upgrade> getListOfUpgrades()
+	public ArrayList<TemporaryUpgrade> getListOfUpgrades()
 	{
 		return ListOfUpgrades;
 	}
 
-	public void setListOfUpgrades(ArrayList<Upgrade> listOfUpgrades)
+	public void setListOfUpgrades(ArrayList<TemporaryUpgrade> listOfUpgrades)
 	{
 		ListOfUpgrades = listOfUpgrades;
 	}
@@ -109,7 +109,7 @@ public class Player
 	{
 		this.health = h;
 		this.points = 0;
-		setListOfUpgrades(new ArrayList<Upgrade>());
+		setListOfUpgrades(new ArrayList<TemporaryUpgrade>());
 		setUpgradeOverTime(0);
 	}
 
@@ -148,27 +148,42 @@ public class Player
 	 */
 	public void addUpgrade(Upgrade upgr)
 	{
-		
-		if (!(upgr instanceof TemporaryUpgrade))
-			return;
 
-		int i = 0;
-		if (!getListOfUpgrades().isEmpty())
+		if ((upgr instanceof TemporaryUpgrade))
 		{
-			for (i = 0; i < getListOfUpgrades().size(); i++)
+
+			int i = 0;
+			if (!getListOfUpgrades().isEmpty())
 			{
-				if (getListOfUpgrades().get(i).getName() == upgr.getName())
+				for (i = 0; i < getListOfUpgrades().size(); i++)
 				{
-					getListOfUpgrades().set(i, upgr);
-					break;
+					if (getListOfUpgrades().get(i).inTypeOf(upgr))
+					{
+						getListOfUpgrades().set(i, (TemporaryUpgrade) upgr);// replace
+																			// the
+																			// upgrade
+																			// with
+																			// the
+																			// new
+																			// one
+																			// of
+																			// his
+																			// kind
+						break;
+					}
 				}
 			}
+			if (i == getListOfUpgrades().size()) // if there is no upgr of that
+													// type
+				getListOfUpgrades().add((TemporaryUpgrade) upgr);
+
+			setUpgradeOverTime(System.currentTimeMillis() + ((TemporaryUpgrade) upgr).getDuration());
+			getPcs().firePropertyChange(upgr.getName(), false, true);
+			((TemporaryUpgrade) upgr).start();
 		}
-		if (i == getListOfUpgrades().size())
-			getListOfUpgrades().add(upgr);
-		setUpgradeOverTime(System.currentTimeMillis() + ((TemporaryUpgrade) upgr).getDuration());
+
 		getPcs().firePropertyChange(upgr.getName(), false, true);
-		upgr.start();
+
 	}
 
 	/**
@@ -182,22 +197,19 @@ public class Player
 	{
 		if (!getListOfUpgrades().isEmpty())
 		{
-			for (int i = 0; i < getListOfUpgrades().size(); i++)
+			int i;
+			for (i = 0; i < getListOfUpgrades().size(); i++)
 			{
-				Upgrade upgr = getListOfUpgrades().get(i);
+				TemporaryUpgrade upgr = getListOfUpgrades().get(i);
 				if (upgr.isOver())
-				{System.out.println("koniec!: " + upgr.getName());
+				{
 					getPcs().firePropertyChange(upgr.getName(), true, false);
 					getListOfUpgrades().remove(i);
 					i--;
 				}
 			}
-			for (Upgrade u : getListOfUpgrades())
-			{
-				if (u instanceof TemporaryUpgrade)
-					return true;
-
-			}
+			if (i != 0)
+				return true;
 		}
 		return false;
 	}
@@ -212,7 +224,7 @@ public class Player
 
 		getListOfUpgrades().clear();
 		setUpgradeOverTime(0);
-		
+
 	}
 
 	public void startPause()
@@ -236,8 +248,8 @@ public class Player
 				if (upgr instanceof TemporaryUpgrade)
 				{
 					((TemporaryUpgrade) upgr).stopPause();
-					setUpgradeOverTime(getUpgradeOverTime() + System.currentTimeMillis() - 
-							getPauseStartTime());
+					setUpgradeOverTime(
+							getUpgradeOverTime() + System.currentTimeMillis() - getPauseStartTime());
 				}
 			}
 	}

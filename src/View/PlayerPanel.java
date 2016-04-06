@@ -87,7 +87,7 @@ public class PlayerPanel extends JPanel
 		g.setColor(Color.black);
 		g.drawRect(0, 0, Constants.STANDARD_ARENA_WIDTH - 1, Constants.STANDARD_PLAYER_AREA_HEIGHT);
 
-		String numBalls = new String("Balls left: " + getPlayer().getHealth());
+		String numBalls = new String("HPs left: " + getPlayer().getHealth());
 		String points = new String("Points: " + getPlayer().getPoints());
 		
 		Font f = new Font("monospaced", Font.BOLD, 16);

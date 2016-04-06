@@ -174,16 +174,16 @@ public abstract class FileManager
 	 *            number of miliseconds to sleep.
 	 */
 	public static void sleep(int ms)
-	{
-		try
 		{
-			Thread.sleep(ms);
-		}
-		catch (InterruptedException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			try
+			{
+				Thread.sleep(ms);
+			}
+			catch (InterruptedException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 
 }

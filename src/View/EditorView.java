@@ -38,7 +38,7 @@ public class EditorView
 	{
 
 		setEditorFrame(new JFrame("Level Editor"));
-		getEditorFrame().setSize(Constants.STANDARD_FRAME_WIDTH + 230, Constants.STANDARD_FRAME_HEIGHT);
+		getEditorFrame().setSize(Constants.STANDARD_FRAME_WIDTH + 240, Constants.STANDARD_FRAME_HEIGHT);
 		getEditorFrame().setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		getEditorFrame().setLayout(new BoxLayout(getEditorFrame().getContentPane(), BoxLayout.X_AXIS));
 		int cols = 10;
@@ -48,7 +48,7 @@ public class EditorView
 
 		setEditorPanel(new GamePanel()
 		{
-			
+
 			@Override
 			public void paintComponent(Graphics g)
 			{
@@ -73,9 +73,9 @@ public class EditorView
 		Box editorBox = new Box(BoxLayout.Y_AXIS);
 		editorBox.add(getEditorPanel());
 		editorBox.setAlignmentY(Component.TOP_ALIGNMENT);
-		editorBox.setBorder(BorderFactory.createTitledBorder("Design your level"));
+		editorBox.setBorder(BorderFactory.createTitledBorder("Design your level: click left mouse button to create the brick and right to delete it!"));
 		getEditorFrame().add(editorBox);
-		
+
 		getEditorPanel().setBorder(BorderFactory.createLineBorder(Color.black));
 		getEditorPanel().setMaximumSize(getEditorPanel().getGamePanelArea());
 		getEditorPanel().setAlignmentY(Component.TOP_ALIGNMENT);
@@ -89,9 +89,9 @@ public class EditorView
 		});
 		getEditorFrame().add(Box.createHorizontalGlue());
 		setChoicePanel(new ChoicePanel());
-		
+
 		getEditorFrame().add(getChoicePanel());
-		
+
 		getEditorFrame().add(Box.createHorizontalGlue());
 
 	}
@@ -138,21 +138,15 @@ public class EditorView
 	}
 
 	/**
-	 * Draws grid and passed objects in editorView. 
-	 * @param editorObjects - objects to rendes
+	 * Draws grid and passed objects in editorView.
+	 * 
+	 * @param editorObjects
+	 *            - objects to rendes
 	 */
 	public void show(ArrayList<StillObject> editorObjects)
 	{
 		getEditorPanel().setListOfObjectsToRender(editorObjects);
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				getEditorPanel().repaint();
-			}
-		});
-		
+		SwingUtilities.invokeLater(() -> getEditorPanel().repaint());
 	}
 
 }

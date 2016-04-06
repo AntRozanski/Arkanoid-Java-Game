@@ -30,6 +30,8 @@ public class GameFactory implements PropertyChangeListener
 	private Racket racket;
 	private PropertyChangeSupport pcs;
 
+	private int balls;
+
 	/**
 	 * @return the gameObjectList
 	 */
@@ -101,6 +103,16 @@ public class GameFactory implements PropertyChangeListener
 		this.pcs = pcs;
 	}
 
+	public int getBalls()
+	{
+		return balls;
+	}
+
+	public void setBalls(int balls)
+	{
+		this.balls = balls;
+	}
+
 	/**
 	 * Contructor of GamaFactory. Parameters below are lists, where newly
 	 * created object will be placed.
@@ -118,7 +130,7 @@ public class GameFactory implements PropertyChangeListener
 		setPcs(prc);
 		getPcs().addPropertyChangeListener("AdditionalBallsUpgrade", this);
 		getPcs().addPropertyChangeListener("MissilesUpgrade", this);
-
+		setBalls(0);
 	}
 
 	/**
@@ -133,13 +145,15 @@ public class GameFactory implements PropertyChangeListener
 	{
 		Ball ball = new Ball(randomColor(),
 				(int) (racket.getX() + (racket.getWidth() / 2)) - (Constants.STANDARD_BALL_RADIUS),
-				(int) (racket.getY() - 2 * Constants.STANDARD_BALL_RADIUS), Constants.STANDARD_BALL_RADIUS * 2,
-				Constants.STANDARD_BALL_RADIUS * 2, Constants.STANDARD_BALL_RADIUS,
-				(1 - (2 * ((int) (Math.random() * 2)))), -1, Math.random(), Constants.STANDARD_BALL_SPEED);
+				(int) (racket.getY() - 2 * Constants.STANDARD_BALL_RADIUS),
+				Constants.STANDARD_BALL_RADIUS * 2, Constants.STANDARD_BALL_RADIUS * 2,
+				Constants.STANDARD_BALL_RADIUS, (1 - (2 * ((int) (Math.random() * 2)))), -1,
+				Math.random() * 0.8, Constants.STANDARD_BALL_SPEED);
+
 		getGameObjectList().add(ball);
 		getMovableObjectList().add(ball);
 		getPcs().addPropertyChangeListener("RampageUpgrade", ball);
-
+		setBalls(getBalls() + 1);
 		// getPcs().addPropertyChangeListener("AdditionalBallsUpgrade", ball);
 
 		return ball;
@@ -160,8 +174,9 @@ public class GameFactory implements PropertyChangeListener
 		{
 			Missile missile = new Missile(Color.green,
 					(int) (racket.getX() + (racket.getWidth() / 2)) - (Constants.STANDARD_BALL_RADIUS),
-					(int) (racket.getY() - 2 * Constants.STANDARD_BALL_RADIUS), Constants.STANDARD_BALL_RADIUS * 2,
-					Constants.STANDARD_BALL_RADIUS * 2, 1, -1, 0, Constants.STANDARD_MISSILE_SPEED);
+					(int) (racket.getY() - 2 * Constants.STANDARD_BALL_RADIUS),
+					Constants.STANDARD_BALL_RADIUS * 2, Constants.STANDARD_BALL_RADIUS * 2, 1, -1, 0,
+					Constants.STANDARD_MISSILE_SPEED);
 
 			getGameObjectList().add(missile);
 			getMovableObjectList().add(missile);
@@ -199,16 +214,16 @@ public class GameFactory implements PropertyChangeListener
 				dirX = -1;
 			if (Y_vect < 0)
 				dirY = 1;
-			Ball ball = new Ball(Color.white, ob.getX(), ob.getY(), Constants.STANDARD_BALL_RADIUS * 2,
-					Constants.STANDARD_BALL_RADIUS * 2, Constants.STANDARD_BALL_RADIUS, dirX, dirY, Math.pow(X_vect, 2),
-					Constants.STANDARD_BALL_SPEED);
+			Ball ball = new Ball(randomColor(), ob.getX(), ob.getY(), Constants.STANDARD_BALL_RADIUS * 2,
+					Constants.STANDARD_BALL_RADIUS * 2, Constants.STANDARD_BALL_RADIUS, dirX, dirY,
+					Math.pow(X_vect, 2), Constants.STANDARD_BALL_SPEED);
 			ball.setMoving(true);
 			getGameObjectList().add(ball);
 			getMovableObjectList().add(ball);
 
 			getPcs().addPropertyChangeListener("AdditionalBallsUpgrade", ball);
 			getPcs().addPropertyChangeListener("RampageUpgrade", ball);
-
+			setBalls(getBalls() + 1);
 		}
 	}
 
@@ -221,7 +236,8 @@ public class GameFactory implements PropertyChangeListener
 	public Racket createRacket()
 	{
 		Dimension dim = new Dimension(Constants.STANDARD_ARENA_WIDTH, Constants.STANDARD_ARENA_HEIGHT);
-		Racket racket = new Racket(Color.orange, ((int) (dim.getWidth() - Constants.STANDARD_RACKET_WIDTH) / 2),
+		Racket racket = new Racket(Color.orange,
+				((int) (dim.getWidth() - Constants.STANDARD_RACKET_WIDTH) / 2),
 				((int) (dim.getHeight() - Constants.STANDARD_RACKET_HEIGHT)), Constants.STANDARD_RACKET_WIDTH,
 				Constants.STANDARD_RACKET_HEIGHT, Constants.STANDARD_RACKET_SPEED);
 		getGameObjectList().add(racket);
@@ -245,7 +261,8 @@ public class GameFactory implements PropertyChangeListener
 
 		Wall wallLeft = new Wall(new Color(178, 34, 34), 0, 0, 10, (int) dim.getHeight());
 		Wall wallUp = new Wall(new Color(178, 34, 34), 0, 0, (int) dim.getWidth(), 10);
-		Wall wallRight = new Wall(new Color(178, 34, 34), ((int) dim.getWidth() - 10), 0, 10, (int) dim.getHeight());
+		Wall wallRight =
+				new Wall(new Color(178, 34, 34), ((int) dim.getWidth() - 10), 0, 10, (int) dim.getHeight());
 
 		getGameObjectList().add(wallLeft);
 		getGameObjectList().add(wallUp);
@@ -268,7 +285,8 @@ public class GameFactory implements PropertyChangeListener
 		Dimension dim = new Dimension(Constants.STANDARD_ARENA_WIDTH, Constants.STANDARD_ARENA_HEIGHT);
 		Wall wallLeft = new Wall(new Color(178, 34, 34), 0, 0, 10, (int) dim.getHeight());
 		Wall wallUp = new Wall(new Color(178, 34, 34), 0, 0, (int) dim.getWidth(), 10);
-		Wall wallRight = new Wall(new Color(178, 34, 34), ((int) dim.getWidth() - 10), 0, 10, (int) dim.getHeight());
+		Wall wallRight =
+				new Wall(new Color(178, 34, 34), ((int) dim.getWidth() - 10), 0, 10, (int) dim.getHeight());
 
 		list.add(wallLeft);
 		list.add(wallUp);
@@ -364,31 +382,44 @@ public class GameFactory implements PropertyChangeListener
 	 */
 	public void createFallingUpdate(Brick b)
 	{
-		double r = Math.random();
+		double r = Math.random() * 2.4;
 		Color color;
 		Upgrade upgr;
-		if (r < 0.1)
+		if (r < 0.1 || (r >= 0.5 && r < 0.7))
 		{
-			color = Color.green;
-			upgr = new TemporaryUpgrade(Constants.BIGGER_RACKET_UPGRADE_TIME, "BiggerRacketUpgrade");
+			color = Color.white;
+			upgr = new Upgrade("AdditionalBallsUpgrade");
+			if (getMovableObjectList().size() > 8)
+				return;
 		}
 		else if (r >= 0.1 && r < 0.2)
 		{
-			color = Color.cyan;
-			upgr = new TemporaryUpgrade(Constants.BIGGER_RACKET_UPGRADE_TIME, "SmallerRacketUpgrade");
+			color = Color.black;
+			upgr = new Upgrade("MissilesUpgrade");
 		}
 
 		else if (r >= 0.2 && r < 0.3)
 		{
-			color = Color.pink;
+			color = Color.green;
+			upgr = new TemporaryUpgrade(Constants.BIGGER_RACKET_UPGRADE_TIME, "BiggerRacketUpgrade");
+		}
+		else if (r >= 0.3 && r < 0.4)
+		{
+			color = Color.orange;
+			upgr = new TemporaryUpgrade(Constants.SMALLER_RACKET_UPGRADE_TIME, "SmallerRacketUpgrade");
+		}
+		else if (r >= 0.4 && r < 0.5)
+		{
+			color = Color.red;
 			upgr = new TemporaryUpgrade(Constants.RAMPAGE_UPGRADE_TIME, "RampageUpgrade");
 		}
 		else
 			return;
 
-		FallingUpgrade fu = new FallingUpgrade(color, b.getX() + (b.getWidth() - Constants.STANDARD_UPGRADE_SIZE) / 2,
-				b.getY(), Constants.STANDARD_UPGRADE_SIZE, Constants.STANDARD_UPGRADE_SIZE, 0, 1, 0.0,
-				Constants.STANDARD_UPGRADE_SPEED, upgr);
+		FallingUpgrade fu =
+				new FallingUpgrade(color, b.getX() + (b.getWidth() - Constants.STANDARD_UPGRADE_SIZE) / 2,
+						b.getY(), Constants.STANDARD_UPGRADE_SIZE, Constants.STANDARD_UPGRADE_SIZE, 0, 1, 0.0,
+						Constants.STANDARD_UPGRADE_SPEED, upgr);
 		fu.setMoving(true);
 		getMovableObjectList().add(fu);
 		getGameObjectList().add(fu);
@@ -415,14 +446,14 @@ public class GameFactory implements PropertyChangeListener
 		{
 			if ((Boolean) evt.getNewValue() == true)
 			{
+				if (getBalls() > 10)
+					return;
 				int k = getMovableObjectList().size();
 				for (int i = 0; i < k; i++)
 				{
 					MovableObject mo = getMovableObjectList().get(i);
 					if (mo.getClass() == Ball.class && mo.isMoving())
 					{
-						if (mo instanceof FallingUpgrade)
-							continue;
 						createBalls((Ball) mo, 4);
 					}
 				}
@@ -431,7 +462,6 @@ public class GameFactory implements PropertyChangeListener
 
 		if (evt.getPropertyName() == "MissilesUpgrade")
 		{
-			System.out.println("Missile fired!");
 			if ((Boolean) evt.getNewValue() == true)
 				createMissiles(getRacket());
 		}

@@ -69,7 +69,7 @@ public class MainPanel extends JPanel
 	}
 
 	public void setPlayer(Player player)
-	{ 
+	{
 		getPlayerPanel().setPlayer(player);
 	}
 

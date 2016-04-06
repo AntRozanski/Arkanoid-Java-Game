@@ -50,7 +50,7 @@ public class GlassPanel extends JPanel
 		setLayout(new BorderLayout());
 		text = new JLabel();
 
-		Font f = new Font("monospaced", Font.BOLD, 16);
+		Font f = new Font("monospaced", Font.BOLD, 24);
 		text.setForeground(Color.white);
 		text.setFont(f);
 		add(text, BorderLayout.CENTER);
@@ -111,7 +111,9 @@ public class GlassPanel extends JPanel
 
 	/**
 	 * Invoking pause screen before new level.
-	 * @param level - number of level to wrote on glassPanel.
+	 * 
+	 * @param level
+	 *            - number of level to wrote on glassPanel.
 	 */
 	public void startNextLevelDialog(int level)
 	{
@@ -146,7 +148,7 @@ public class GlassPanel extends JPanel
 			public void run()
 			{
 				setOpaque(true);
-				text.setText("YOU HAVE LOST!!!");
+				text.setText("GAME OVER");
 				text.setVisible(true);
 
 				setTranslated(false);

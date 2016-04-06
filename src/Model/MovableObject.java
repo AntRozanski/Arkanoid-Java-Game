@@ -21,12 +21,12 @@ public abstract class MovableObject extends GameObject
 	private double ratio;
 
 	/**
-	 * the exact x position of movableObject. Every step, this field is rounded
+	 * the exact x position of movableObject. Every Model.update() iteration, this field is rounded
 	 * to nearest int value, to draw the object.
 	 */
 	private double x_pos;
 	/**
-	 * the exact y position of movableObject. Every step, this field is rounded
+	 * the exact y position of movableObject. Every Model.update() iteration, this field is rounded
 	 * to nearest int value, to draw the object.
 	 */
 	private double y_pos;
@@ -404,6 +404,9 @@ public abstract class MovableObject extends GameObject
 
 		setX_speed(Math.sqrt(getRatio()) * getVelocity());
 		setY_speed(Math.sqrt(1 - getRatio()) * getVelocity());
+		if(getY_speed()<0.1)
+			setY_speed(0.3);
+				
 
 	}
 

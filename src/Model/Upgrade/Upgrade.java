@@ -1,6 +1,6 @@
 package Model.Upgrade;
 
-public abstract class Upgrade
+public class Upgrade
 {
 	private String name;
 
@@ -14,8 +14,20 @@ public abstract class Upgrade
 		this.name = name;
 	}
 
-	public abstract void start();
+	public Upgrade(String name)
+	{
+		this.name = name;
+	}
 
-	public abstract boolean isOver();
-	
+	public boolean inTypeOf(Upgrade upgr)
+	{
+		if (upgr.getName() == this.getName())
+			return true;
+		else if ((this.name == "BiggerRacketUpgrade" || this.name == "SmallerRacketUpgrade")
+				&& (upgr.getName() == "BiggerRacketUpgrade" || upgr.getName() == "SmallerRacketUpgrade"))
+			return true;
+		else 
+			return false;
+	}
+
 }

@@ -1,5 +1,7 @@
 package Controller;
 
+import javax.swing.SwingUtilities;
+
 import Model.Model;
 import Utils.Constants;
 import Utils.FileManager;
@@ -149,10 +151,12 @@ public class Controller
 		setOver(false);
 		setNextLevel(false);
 
-		getView().getLayeredPanel().getMainPanel().getPlayerPanel().setPlayer(getModel().getPlayer());
+		getView().getLayeredPanel().getMainPanel().getPlayerPanel()
+				.setPlayer(getModel().getPlayer());
 		getView().getEditorView().getEditorPanel()
 				.setListOfObjectsToRender(getModel().getEditorModel().getEditorObjects());
-		getView().getEditorView().getChoicePanel().createChoicePanel(getModel().getEditorModel().getMaxLevel());
+		getView().getEditorView().getChoicePanel()
+				.createChoicePanel(getModel().getEditorModel().getMaxLevel());
 	}
 
 	/**
@@ -166,10 +170,19 @@ public class Controller
 	 *
 	 *
 	 */
-	public void startGame()
+	public void showMenu()
 	{
+
+		view.getMenuView().getMenuFrame().setVisible(true);
+
+	}
+
+	public void startGame()
+	{	
 		view.getMainFrame().setVisible(true);
+		model.loadNextLevel();
 		long delta = 0l;
+
 		while (!isOver())
 		{
 			while (isRunning())
@@ -182,8 +195,8 @@ public class Controller
 					break;
 				long lastTime = System.nanoTime();
 
-				if (model.update())
-					view.render(getModel().getGameObjectList(), getModel().getPlayer());
+				 if (model.update())
+				view.render(getModel().getGameObjectList(), getModel().getPlayer());
 
 				delta = System.nanoTime() - lastTime;
 				if (delta < Constants.GAME_LOOP_TIME)
@@ -209,7 +222,8 @@ public class Controller
 	 */
 	private void showNextLevelDialog()
 	{
-		getView().getLayeredPanel().getGlassPanel().startNextLevelDialog(getModel().getCurrentLevel());
+		getView().getLayeredPanel().getGlassPanel()
+				.startNextLevelDialog(getModel().getCurrentLevel());
 		FileManager.sleep(3000);
 		getView().getLayeredPanel().getGlassPanel().stopPause();
 		setNextLevel(false);
@@ -224,7 +238,7 @@ public class Controller
 	public void endOfGame()
 	{
 		getView().getLayeredPanel().getGlassPanel().goodbye();
-		FileManager.sleep(3000);
+		FileManager.sleep(2000);
 		getView().getResultsView().endOfGame(getModel().getResultsModel().getPlayersList());
 	}
 }

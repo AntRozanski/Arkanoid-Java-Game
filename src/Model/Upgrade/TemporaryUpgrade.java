@@ -17,7 +17,7 @@ public class TemporaryUpgrade extends Upgrade
 
 	public TemporaryUpgrade(int duration, String name)
 	{
-		setName(name);
+		super(name);
 		setDuration(duration);
 		setPauseTime(0);
 		setPauseStartTime(0);
@@ -64,14 +64,14 @@ public class TemporaryUpgrade extends Upgrade
 		this.pauseTime = pauseTime;
 	}
 
-	@Override
+
 	public boolean isOver()
-	{	
-		
+	{
+
 		return (System.currentTimeMillis() - getUpgrStartTime() - getPauseTime() > duration);
 	}
 
-	@Override
+	
 	public void start()
 	{
 		setUpgrStartTime(System.currentTimeMillis());

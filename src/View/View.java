@@ -32,6 +32,7 @@ public class View
 
 	private ResultsView resultsView;
 	private EditorView editorView;
+	private MenuView menuView;
 
 	public ResultsView getResultsView()
 	{
@@ -91,6 +92,7 @@ public class View
 		getLayeredPanel().setController(getController());
 		getResultsView().setInputController(getController().getInputController());
 		getEditorView().setInputController(getController().getInputController());
+		getMenuView().setInputController(getController().getInputController());
 
 	}
 
@@ -104,11 +106,19 @@ public class View
 		this.editorView = editorView;
 	}
 
+	public MenuView getMenuView()
+	{
+		return menuView;
+	}
+
+	public void setMenuView(MenuView menuView)
+	{
+		this.menuView = menuView;
+	}
+
 	public View()
 	{
-		setMainFrame(new JFrame());
-
-		getMainFrame().setTitle("Arkanoid v3.1");
+		setMainFrame(new JFrame("Arkanoid v6.1"));
 		getMainFrame().setSize(Constants.STANDARD_FRAME_WIDTH, Constants.STANDARD_FRAME_HEIGHT);
 		getMainFrame().setLocationRelativeTo(null);
 		getMainFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -119,6 +129,7 @@ public class View
 
 		setResultsView(new ResultsView());
 		setEditorView(new EditorView());
+		setMenuView(new MenuView());
 
 	}
 

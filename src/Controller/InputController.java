@@ -3,6 +3,8 @@ package Controller;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
+import javax.swing.SwingUtilities;
+
 import Model.Model;
 import View.GlassPanel;
 import View.View;
@@ -16,11 +18,11 @@ import View.View;
 
 public class InputController
 {
-	/**
-	 * When true, blocks all functions. Changing when 'P' key is clicked.
-	 * 
-	 */
-	private boolean blockade;
+
+	private boolean blockade;// When true, blocks all functions. Changing when
+								// 'P' key is clicked.
+	private int pressedKeys;// counter for pressed arrow keys. When 2 and one of
+							// the keys are released, racket won't stop moving.
 	private Model model;
 	private View view;
 	private Controller controller;
@@ -86,6 +88,16 @@ public class InputController
 		this.blockade = blockade;
 	}
 
+	public int getPressedKeys()
+	{
+		return pressedKeys;
+	}
+
+	public void setPressedKeys(int pressedKeys)
+	{
+		this.pressedKeys = pressedKeys;
+	}
+
 	/**
 	 * Constructor of InputController.
 	 * 
@@ -102,6 +114,7 @@ public class InputController
 		this.setController(controller);
 		this.view = view;
 		this.blockade = false;
+		this.pressedKeys = 0;
 	}
 
 	/**
@@ -153,14 +166,20 @@ public class InputController
 		{
 			if (ke.getKeyCode() == KeyEvent.VK_RIGHT || ke.getKeyCode() == KeyEvent.VK_LEFT)
 			{
-
-				if (ke.getKeyCode() == KeyEvent.VK_RIGHT)
+				if (ke.getKeyCode() == KeyEvent.VK_RIGHT && !(getModel().getRacketDirection() == 1))
+				{
 					getModel().setRacketDirection(1);
-				else
+					setPressedKeys(getPressedKeys() + 1);
+				}
+				else if (ke.getKeyCode() == KeyEvent.VK_LEFT && !(getModel().getRacketDirection() == -1))
+				{
 					getModel().setRacketDirection(-1);
+					setPressedKeys(getPressedKeys() + 1);
+
+				}
 
 			}
-			if (ke.getKeyCode() == KeyEvent.VK_DOWN)
+			if (ke.getKeyCode() == KeyEvent.VK_UP)
 			{
 				getModel().shootBall();
 			}
@@ -172,11 +191,11 @@ public class InputController
 			{
 				showEditor();
 			}
-			if (ke.getKeyCode() == KeyEvent.VK_UP)
+	/*		if (ke.getKeyCode() == KeyEvent.VK_UP)
 			{
 				getModel().setNewBall(true);
-			}
-			if (ke.getKeyCode() == KeyEvent.VK_S)
+			}*/
+			/*if (ke.getKeyCode() == KeyEvent.VK_S)
 			{
 				getModel().getPcs().firePropertyChange("AdditionalBallsUpgrade", false, true);
 			}
@@ -195,13 +214,31 @@ public class InputController
 			if (ke.getKeyCode() == KeyEvent.VK_Q)
 			{
 				getModel().getPcs().firePropertyChange("MissilesUpgrade", false, true);
-			}
+			}*/
 			if (ke.getKeyCode() == KeyEvent.VK_SPACE)
 			{
 				getModel().fireMissile();
 			}
 		}
 
+	}
+
+	/**
+	 * Function called when user stops pressing left or right arrow and
+	 * therefore racket should stop moving.
+	 */
+	public void keyReleased(KeyEvent ke)
+	{
+		if (ke.getKeyCode() == KeyEvent.VK_RIGHT || ke.getKeyCode() == KeyEvent.VK_LEFT)
+		{
+			setPressedKeys(getPressedKeys() - 1);
+			if (getPressedKeys() == 1 && ke.getKeyCode() == KeyEvent.VK_RIGHT)
+				getModel().setRacketDirection(-1);
+			else if (getPressedKeys() == 1 && ke.getKeyCode() == KeyEvent.VK_LEFT)
+				getModel().setRacketDirection(1);
+			else
+				getModel().setRacketDirection(0);
+		}
 	}
 
 	/**
@@ -327,12 +364,13 @@ public class InputController
 	}
 
 	/**
-	 * Function called when user stops pressing left or right arrow and
-	 * therefore racket should stop moving.
+	 * Processing main menu "Play" button
 	 */
-	public void keyReleased(KeyEvent ke)
+	public void menuPlay()
 	{
-		if (ke.getKeyCode() == KeyEvent.VK_RIGHT || ke.getKeyCode() == KeyEvent.VK_LEFT)
-			getModel().setRacketDirection(0);
+
+		getView().getMenuView().getMenuFrame().setVisible(false);
+		getController().startGame();
+
 	}
 }

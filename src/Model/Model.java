@@ -188,11 +188,9 @@ public class Model
 		getPlayer().setPcs(getPcs());
 		setRacket(getFactory().createRacket());
 		getFactory().createWalls();
-		loadNextLevel();
 		setResultsModel(new ResultsModel(this.getPlayer()));
 		setEditorModel(new EditorModel(getFactory()));
 		getFactory().createWalls(getEditorModel().getEditorObjects());
-
 		newBall = true;
 
 	}
@@ -228,6 +226,8 @@ public class Model
 		setCurrentLevel(getCurrentLevel() + 1);
 		getMovableObjectList().clear();
 		getPlayer().resetUpgrades();
+		getFactory().setBalls(0);
+		setNewBall(true);
 
 	}
 
@@ -242,8 +242,8 @@ public class Model
 	public boolean update()
 	{
 		boolean isChanged = false;
-		if(getPlayer().updateUpgrades())
-			isChanged=true;
+		if (getPlayer().updateUpgrades())
+			isChanged = true;
 
 		if (getRacket().getWidth() != getRacket().getDesiredWidth())
 		{
@@ -274,12 +274,19 @@ public class Model
 				{
 					remove(movOb);
 					i--;
-					if (movOb instanceof Ball || movOb.getY() > Constants.STANDARD_ARENA_HEIGHT)
-						if (getPlayer().decreaseHP())
+					if (movOb instanceof Ball && movOb.getY() > Constants.STANDARD_ARENA_HEIGHT)
+					{
+						getFactory().setBalls(getFactory().getBalls() - 1);
+						if (getFactory().getBalls() == 0)
 						{
-							getController().setOver(true);
-							break;
+							if (getPlayer().decreaseHP())
+							{
+								getController().setOver(true);
+								break;
+							}
+							setNewBall(true);
 						}
+					}
 					continue;
 				}
 				if (movOb.collide(getRacket()))
@@ -374,10 +381,11 @@ public class Model
 		for (int i = 0; i < getMovableObjectList().size(); i++)
 		{
 			MovableObject movOb = getMovableObjectList().get(i);
-			if (!movOb.isMoving()) 
+			if (!movOb.isMoving())
 			{
 				// if (movOb instanceof Ball)
-				movOb.setCoordinates((int) (getRacket().getX() + (getRacket().getWidth() / 2)) - (movOb.getWidth() / 2),
+				movOb.setCoordinates(
+						(int) (getRacket().getX() + (getRacket().getWidth() / 2)) - (movOb.getWidth() / 2),
 						(int) (getRacket().getY() - movOb.getHeight()));
 			}
 		}

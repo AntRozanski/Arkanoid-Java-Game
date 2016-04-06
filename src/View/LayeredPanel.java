@@ -20,7 +20,7 @@ import Utils.Constants;
  * JLayeredPane that contains all JPanels on which game is rendered. It has
  * mainPanel, where actual game is happening and also glassPanel, which is
  * visible during all kinds of pauses.
- * 
+ *
  * @author Antek
  *
  */
@@ -97,6 +97,7 @@ public class LayeredPanel extends JLayeredPane
 
 		addKeyListener(new KeyAdapter()
 		{
+			@Override
 			public void keyPressed(KeyEvent ke)
 			{
 				getController().getInputController().handleInput(ke);
@@ -112,7 +113,7 @@ public class LayeredPanel extends JLayeredPane
 
 	/**
 	 * Sets mainPanel's fields with new values and call repaint() function.
-	 * 
+	 *
 	 * @param ListOfObjects
 	 * @param player
 	 */
@@ -120,16 +121,14 @@ public class LayeredPanel extends JLayeredPane
 	{
 		getMainPanel().setListOfObjectsToRender(ListOfObjects);
 		getMainPanel().setPlayer(player);
-
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				repaint();
-
-			}
-		});
+		repaint();
+		/*
+		 * SwingUtilities.invokeLater(new Runnable() {
+		 * 
+		 * @Override public void run() { System.out.println("halo?"); repaint();
+		 * 
+		 * } });
+		 */
 	}
 
 	@Override
