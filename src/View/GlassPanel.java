@@ -81,9 +81,8 @@ public class GlassPanel extends JPanel
 			{
 				setOpaque(true);
 				text.setText(
-						"<html><center>***GAME PAUSED***<br><br>Hit 'P' to resume,'E' for Editor or 'H' to see best results.</html>");
+						"<html><center>***GAME PAUSED***<br><br>Hit 'P' to resume or 'Q' to go to the menu.</html>");
 				text.setVisible(true);
-
 				setTranslated(false);
 			}
 		});
@@ -159,7 +158,6 @@ public class GlassPanel extends JPanel
 	@Override
 	public void paintComponent(Graphics g)
 	{
-
 		LayeredPanel lp = (LayeredPanel) getParent();
 		setSize(lp.getSize());
 

@@ -16,10 +16,10 @@ import Utils.Constants;
  * MainView class of the game. It is responsible for everything the user sees
  * during the the game. Has no direct connection with Model, everything happens
  * through Controller.
- * 
+ *
  * It contains JFrame, LayeredPanel with game board inside it and other views
  * instances: ResultView and EditorView.
- * 
+ *
  * @author Antek
  *
  */
@@ -82,7 +82,7 @@ public class View
 	/**
 	 * Sets the controller for its own use and passes it to all interested minor
 	 * views.
-	 * 
+	 *
 	 * @param controller
 	 *            the controller to set
 	 */
@@ -118,7 +118,7 @@ public class View
 
 	public View()
 	{
-		setMainFrame(new JFrame("Arkanoid v6.1"));
+		setMainFrame(new JFrame("Arkanoid v7.0"));
 		getMainFrame().setSize(Constants.STANDARD_FRAME_WIDTH, Constants.STANDARD_FRAME_HEIGHT);
 		getMainFrame().setLocationRelativeTo(null);
 		getMainFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -134,9 +134,9 @@ public class View
 	}
 
 	/**
-	 * Most commonly used functions right beside Model's update(). Orders minor
+	 * Most commonly used function right beside Model's update(). Orders minor
 	 * views to render themself.
-	 * 
+	 *
 	 * @param ListOfObjects
 	 *            - list of all objects in game to render.
 	 * @param player

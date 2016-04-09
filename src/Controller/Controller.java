@@ -13,8 +13,7 @@ import View.View;
  * @author Antek
  *
  */
-public class Controller
-{
+public class Controller {
 	private View view;
 	private Model model;
 	private InputController inputController;
@@ -31,16 +30,14 @@ public class Controller
 		return nextLevel;
 	}
 
-	public void setNextLevel(boolean nextLevel)
-	{
+	public void setNextLevel(boolean nextLevel) {
 		this.nextLevel = nextLevel;
 	}
 
 	/**
 	 * @return the view
 	 */
-	public View getView()
-	{
+	public View getView() {
 		return view;
 	}
 
@@ -48,16 +45,14 @@ public class Controller
 	 * @param view
 	 *            the view to set
 	 */
-	public void setView(View view)
-	{
+	public void setView(View view) {
 		this.view = view;
 	}
 
 	/**
 	 * @return the model
 	 */
-	public Model getModel()
-	{
+	public Model getModel() {
 		return model;
 	}
 
@@ -65,8 +60,7 @@ public class Controller
 	 * @param model
 	 *            the model to set
 	 */
-	public void setModel(Model model)
-	{
+	public void setModel(Model model) {
 		this.model = model;
 
 	}
@@ -74,8 +68,7 @@ public class Controller
 	/**
 	 * @return the isRunning
 	 */
-	public boolean isRunning()
-	{
+	public boolean isRunning() {
 		return isRunning;
 	}
 
@@ -83,16 +76,14 @@ public class Controller
 	 * @param isRunning
 	 *            the isRunning to set
 	 */
-	public void setRunning(boolean isRunning)
-	{
+	public void setRunning(boolean isRunning) {
 		this.isRunning = isRunning;
 	}
 
 	/**
 	 * @return the isOver
 	 */
-	public boolean isOver()
-	{
+	public boolean isOver() {
 		return isOver;
 	}
 
@@ -100,16 +91,14 @@ public class Controller
 	 * @param isOver
 	 *            the isOver to set
 	 */
-	public void setOver(boolean isOver)
-	{
+	public void setOver(boolean isOver) {
 		this.isOver = isOver;
 	}
 
 	/**
 	 * @return the inputController
 	 */
-	public InputController getInputController()
-	{
+	public InputController getInputController() {
 		return inputController;
 	}
 
@@ -117,18 +106,15 @@ public class Controller
 	 * @param inputController
 	 *            the inputController to set
 	 */
-	public void setInputController(InputController inputController)
-	{
+	public void setInputController(InputController inputController) {
 		this.inputController = inputController;
 	}
 
-	public boolean isPause()
-	{
+	public boolean isPause() {
 		return isPause;
 	}
 
-	public void setPause(boolean isPause)
-	{
+	public void setPause(boolean isPause) {
 		this.isPause = isPause;
 	}
 
@@ -141,8 +127,7 @@ public class Controller
 	 * @param model
 	 *            to set
 	 */
-	public Controller(View view, Model model)
-	{
+	public Controller(View view, Model model) {
 		this.model = model;
 		this.view = view;
 		setInputController(new InputController(model, this, view));
@@ -151,17 +136,29 @@ public class Controller
 		setOver(false);
 		setNextLevel(false);
 
-		getView().getLayeredPanel().getMainPanel().getPlayerPanel()
-				.setPlayer(getModel().getPlayer());
+		getView().getLayeredPanel().getMainPanel().getPlayerPanel().setPlayer(getModel().getPlayer());
 		getView().getEditorView().getEditorPanel()
 				.setListOfObjectsToRender(getModel().getEditorModel().getEditorObjects());
-		getView().getEditorView().getChoicePanel()
-				.createChoicePanel(getModel().getEditorModel().getMaxLevel());
+		getView().getEditorView().getChoicePanel().createChoicePanel(getModel().getEditorModel().getMaxLevel());
 	}
 
+
+	public void showMenu() {
+
+		view.getMenuView().getMenuFrame().setVisible(true);
+
+	}
+	/**
+	 * Function loads first level and starts the game.
+	 *
+	 */
+	public void startGame() {
+		model.loadNextLevel();
+		playGame();
+	}
 	/**
 	 * Main function of the game. In main loop of the game, model is updating
-	 * and view is rendering altenately, as long as there is no pause/new level
+	 * and view is rendering alternately, as long as there is no pause/new level
 	 * screen called and player life amount is bigger than zero (if is less,
 	 * funtion and game ends).
 	 *
@@ -170,23 +167,13 @@ public class Controller
 	 *
 	 *
 	 */
-	public void showMenu()
-	{
-
-		view.getMenuView().getMenuFrame().setVisible(true);
-
-	}
-
-	public void startGame()
-	{	
+	public void playGame() {
 		view.getMainFrame().setVisible(true);
-		model.loadNextLevel();
 		long delta = 0l;
 
-		while (!isOver())
-		{
-			while (isRunning())
-			{
+		while (!isOver()) {
+
+			while (isRunning()) {
 				if (isNextLevel())
 					setRunning(false);
 				if (isPause())
@@ -194,22 +181,17 @@ public class Controller
 				if (isOver())
 					break;
 				long lastTime = System.nanoTime();
-
-				 if (model.update())
-				view.render(getModel().getGameObjectList(), getModel().getPlayer());
-
+				if (model.update())
+					view.render(getModel().getGameObjectList(), getModel().getPlayer());
 				delta = System.nanoTime() - lastTime;
 				if (delta < Constants.GAME_LOOP_TIME)
 					FileManager.sleep((int) (Constants.GAME_LOOP_TIME - delta) / 1000000);
+
 			}
 			if (isNextLevel())
-			{
 				showNextLevelDialog();
-			}
-			if (isPause())
-			{
+			if (isPause()) {
 				getView().getLayeredPanel().getGlassPanel().startPause();
-				getModel().getPlayer().startPause();
 				setPause(false);
 			}
 		}
@@ -218,12 +200,10 @@ public class Controller
 
 	/**
 	 * When level is finished, this function instructs View to render special
-	 * dim Jpanel with info about new level.
+	 * dim JPanel with info about new level.
 	 */
-	private void showNextLevelDialog()
-	{
-		getView().getLayeredPanel().getGlassPanel()
-				.startNextLevelDialog(getModel().getCurrentLevel());
+	private void showNextLevelDialog() {
+		getView().getLayeredPanel().getGlassPanel().startNextLevelDialog(getModel().getCurrentLevel());
 		FileManager.sleep(3000);
 		getView().getLayeredPanel().getGlassPanel().stopPause();
 		setNextLevel(false);
@@ -235,8 +215,7 @@ public class Controller
 	 * Function called at the end of the game. Instructs View to show 'goodbye'
 	 * view and best results.
 	 */
-	public void endOfGame()
-	{
+	public void endOfGame() {
 		getView().getLayeredPanel().getGlassPanel().goodbye();
 		FileManager.sleep(2000);
 		getView().getResultsView().endOfGame(getModel().getResultsModel().getPlayersList());

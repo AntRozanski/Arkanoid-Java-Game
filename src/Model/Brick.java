@@ -58,8 +58,7 @@ public class Brick extends StillObject
 		g.setColor(getColor());
 		g.fillRect(getX(), getY(), getWidth(), getHeight());
 		g.setColor(Color.black);
-		// System.out.println("Rysuje bricka! hehe :)");
 		g.drawRect(getX(), getY(), getWidth(), getHeight());
+		
 	}
-
 }

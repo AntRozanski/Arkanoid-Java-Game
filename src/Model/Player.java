@@ -15,8 +15,7 @@ import Model.Upgrade.Upgrade;
  * @author Antek
  *
  */
-public class Player
-{
+public class Player {
 	private PropertyChangeSupport pcs;
 	private int health;
 	private int points;
@@ -27,8 +26,7 @@ public class Player
 	/**
 	 * @return the health
 	 */
-	public int getHealth()
-	{
+	public int getHealth() {
 		return health;
 	}
 
@@ -36,16 +34,14 @@ public class Player
 	 * @param health
 	 *            the health to set
 	 */
-	public void setHealth(int health)
-	{
+	public void setHealth(int health) {
 		this.health = health;
 	}
 
 	/**
 	 * @return the points
 	 */
-	public int getPoints()
-	{
+	public int getPoints() {
 		return points;
 	}
 
@@ -53,26 +49,22 @@ public class Player
 	 * @param points
 	 *            the points to set
 	 */
-	public void setPoints(int points)
-	{
+	public void setPoints(int points) {
 		this.points = points;
 	}
 
-	public ArrayList<TemporaryUpgrade> getListOfUpgrades()
-	{
+	public ArrayList<TemporaryUpgrade> getListOfUpgrades() {
 		return ListOfUpgrades;
 	}
 
-	public void setListOfUpgrades(ArrayList<TemporaryUpgrade> listOfUpgrades)
-	{
+	public void setListOfUpgrades(ArrayList<TemporaryUpgrade> listOfUpgrades) {
 		ListOfUpgrades = listOfUpgrades;
 	}
 
 	/**
 	 * @return the pcs
 	 */
-	public PropertyChangeSupport getPcs()
-	{
+	public PropertyChangeSupport getPcs() {
 		return pcs;
 	}
 
@@ -80,33 +72,27 @@ public class Player
 	 * @param pcs
 	 *            the pcs to set
 	 */
-	public void setPcs(PropertyChangeSupport pcs)
-	{
+	public void setPcs(PropertyChangeSupport pcs) {
 		this.pcs = pcs;
 	}
 
-	public long getPauseStartTime()
-	{
+	public long getPauseStartTime() {
 		return pauseStartTime;
 	}
 
-	public void setPauseStartTime(long pauseStartTime)
-	{
+	public void setPauseStartTime(long pauseStartTime) {
 		this.pauseStartTime = pauseStartTime;
 	}
 
-	public long getUpgradeOverTime()
-	{
+	public long getUpgradeOverTime() {
 		return upgradeOverTime;
 	}
 
-	public void setUpgradeOverTime(long upgradeOverTime)
-	{
+	public void setUpgradeOverTime(long upgradeOverTime) {
 		this.upgradeOverTime = upgradeOverTime;
 	}
 
-	public Player(int h)
-	{
+	public Player(int h) {
 		this.health = h;
 		this.points = 0;
 		setListOfUpgrades(new ArrayList<TemporaryUpgrade>());
@@ -118,8 +104,7 @@ public class Player
 	 *
 	 * @return true, if helath == 0
 	 */
-	public boolean decreaseHP()
-	{
+	public boolean decreaseHP() {
 		setHealth(getHealth() - 1);
 		if (getHealth() == 0)
 			return true;
@@ -132,8 +117,7 @@ public class Player
 	 * @param num
 	 *            - points to add
 	 */
-	public void addPoints(int num)
-	{
+	public void addPoints(int num) {
 		setPoints(getPoints() + num);
 	}
 
@@ -146,19 +130,14 @@ public class Player
 	 *
 	 * @param upgr
 	 */
-	public void addUpgrade(Upgrade upgr)
-	{
+	public void addUpgrade(Upgrade upgr) {
 
-		if ((upgr instanceof TemporaryUpgrade))
-		{
+		if ((upgr instanceof TemporaryUpgrade)) {
 
 			int i = 0;
-			if (!getListOfUpgrades().isEmpty())
-			{
-				for (i = 0; i < getListOfUpgrades().size(); i++)
-				{
-					if (getListOfUpgrades().get(i).inTypeOf(upgr))
-					{
+			if (!getListOfUpgrades().isEmpty()) {
+				for (i = 0; i < getListOfUpgrades().size(); i++) {
+					if (getListOfUpgrades().get(i).inTypeOf(upgr)) {
 						getListOfUpgrades().set(i, (TemporaryUpgrade) upgr);// replace
 																			// the
 																			// upgrade
@@ -191,18 +170,14 @@ public class Player
 	 * removed from the list. Also ensures if there is any active temporary
 	 * upgrades, to refresh view.
 	 * 
-	 * @return true, if there ary any temporaryUpgrades in the list.
+	 * @return true, if there is any temporaryUpgrade in the list.
 	 */
-	public boolean updateUpgrades()
-	{
-		if (!getListOfUpgrades().isEmpty())
-		{
+	public boolean updateUpgrades() {
+		if (!getListOfUpgrades().isEmpty()) {
 			int i;
-			for (i = 0; i < getListOfUpgrades().size(); i++)
-			{
+			for (i = 0; i < getListOfUpgrades().size(); i++) {
 				TemporaryUpgrade upgr = getListOfUpgrades().get(i);
-				if (upgr.isOver())
-				{
+				if (upgr.isOver()) {
 					getPcs().firePropertyChange(upgr.getName(), true, false);
 					getListOfUpgrades().remove(i);
 					i--;
@@ -215,10 +190,9 @@ public class Player
 	}
 
 	/**
-	 * Funciotn called when new level is being loaded.
+	 * Function called when new level is being loaded.
 	 */
-	public void resetUpgrades()
-	{
+	public void resetUpgrades() {
 		for (Upgrade upgr : getListOfUpgrades())
 			getPcs().firePropertyChange(upgr.getName(), true, false);
 
@@ -227,31 +201,42 @@ public class Player
 
 	}
 
-	public void startPause()
-	{
+	public void startPause() {
 		if (!getListOfUpgrades().isEmpty())
-			for (Upgrade upgr : getListOfUpgrades())
-			{
-				if (upgr instanceof TemporaryUpgrade)
-				{
+			for (Upgrade upgr : getListOfUpgrades()) {
+				if (upgr instanceof TemporaryUpgrade) {
 					((TemporaryUpgrade) upgr).startPause();
 					setPauseStartTime(System.currentTimeMillis());
 				}
 			}
 	}
 
-	public void stopPause()
-	{
-		if (!getListOfUpgrades().isEmpty())
-			for (Upgrade upgr : getListOfUpgrades())
-			{
+	public void stopPause() {
+		if (!getListOfUpgrades().isEmpty()) {
+			for (Upgrade upgr : getListOfUpgrades()) {
 				if (upgr instanceof TemporaryUpgrade)
-				{
 					((TemporaryUpgrade) upgr).stopPause();
-					setUpgradeOverTime(
-							getUpgradeOverTime() + System.currentTimeMillis() - getPauseStartTime());
-				}
 			}
+			setUpgradeOverTime(getUpgradeOverTime() + System.currentTimeMillis() - getPauseStartTime());
+		}
+		setPauseStartTime(0);
+
+	}
+	/**
+	 * Used by PlayerPanel to show Upgrade time left. 
+	 */
+	public String getTimeAsString() {
+		long someTime;
+		if (getPauseStartTime() == 0) // not in pause
+		{
+			someTime = getUpgradeOverTime() - System.currentTimeMillis();
+		} else {
+			someTime = getUpgradeOverTime() - getPauseStartTime();
+		}
+		if (someTime < 0)
+			return "";
+		else
+			return ("Upgrade time left: " + someTime / 1000 + "." + someTime / 100);
 	}
 
 }

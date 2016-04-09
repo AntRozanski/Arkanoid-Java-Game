@@ -56,7 +56,6 @@ public abstract class MovableObject extends GameObject
 	{
 		return velocity;
 	}
-
 	/**
 	 * @param velocity
 	 *            the velocity to set
@@ -380,14 +379,13 @@ public abstract class MovableObject extends GameObject
 	 * x-axis and y-axis direction and speed.
 	 */
 	public void move()
-	{
+	{	
 		if (isMoving)
 		{
 			setX_pos(getX_pos() + (getX_speed() * getDirectionX()));
 			setX((int) Math.round(getX_pos()));
 			setY_pos((getY_pos() + (getY_speed() * getDirectionY())));
 			setY((int) Math.round(getY_pos()));
-
 		}
 
 	}
