@@ -20,7 +20,6 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 import Controller.InputController;
-import javafx.scene.layout.VBox;
 
 /**
  * Class representing menu - first GUI to see after starting the app.
@@ -185,7 +184,7 @@ public class MenuView {
 									+ "Welcome to a simple Java app which imitates the classic game 'Arkanoid'. " + '\n'
 									+ "Game was created as a student project in the second year of studies at the "
 									+ "Warsaw Univeristy of Technology, for learning purposes only." + '\n' + '\n'
-									+ "A. Ró¿añski. " + '\n' + "(ant.rozanski@gmail.com).");
+									+ "A. Rï¿½aï¿½ski. " + '\n' + "(ant.rozanski@gmail.com).");
 							ta.setLineWrap(true);
 							ta.setAlignmentX(Component.CENTER_ALIGNMENT);
 							ta.setWrapStyleWord(true);
